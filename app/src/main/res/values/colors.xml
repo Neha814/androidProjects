@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="orange">#e16c40</color>
+    <color name="yellow">#ffdb23</color>
+    <color  name ="dark_org">#e06c33</color>
+    <color  name ="golden">#f4d847</color>
+    <color  name = "org_line">#e48150</color>
+
+    <color  name = "grey">#374351</color>
+    <color  name = "light_grey">#b85f35</color>
+    <color name="grey_text_color">#e5d7d4</color>
+</resources>

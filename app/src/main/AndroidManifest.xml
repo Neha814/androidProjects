@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.takeatask" >
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="21" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon_w"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <!-- Enables the Android Pay API -->
+       <!-- <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />-->
+
+     <!--   <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />-->
+
+
+    <activity
+        android:name=".SplashScreen"
+        android:label="@string/app_name" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity
+        android:name="Login"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="Register"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="Home"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="Settings"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="Profile"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="ForgotPassword"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="ChangePassword"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="DefaultProfile"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="PostTask1"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="PostTask2"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="PostTask3"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="PostTask4"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="PostTask5"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="PostTask6"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="CurrentPostedMyTasks"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="History_posted_task"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="MessageList"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="ChatScreen"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustResize|stateHidden" >
+    </activity>
+    <activity
+        android:name="Payment"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="Credit_Card_Payment"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="PayPal_Payment"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="Reviews"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="AlertNotification"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="TakeATask"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="TaskDetail"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="Bidding"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="BiddingList"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="ViewProfile"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="TakeALook"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="FAQ"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="FAQ_Answers"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="CategoryListing"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="CurrentPerformingTasks"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="History_Performing_Task"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="AddRating"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="MyTaskDetail"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="SelectTasker"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+    <activity
+        android:name="TermsAndConditions"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan" >
+    </activity>
+        <activity
+            android:name="IncomingPayment"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <activity android:name="OutgoingPayment"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+    <!--<service
+        android:name="com.paypal.android.sdk.payments.PayPalService"
+        android:exported="false" />
+
+    <activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
+    <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+    <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
+    <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
+    <activity android:name="com.paypal.android.sdk.payments.PayPalFuturePaymentActivity" />
+    <activity android:name="com.paypal.android.sdk.payments.FuturePaymentConsentActivity" />
+    <activity android:name="com.paypal.android.sdk.payments.FuturePaymentInfoActivity" />
+    <activity
+        android:name="io.card.payment.CardIOActivity"
+        android:configChanges="keyboardHidden|orientation" />
+    <activity android:name="io.card.payment.DataEntryActivity" />-->
+
+    <service android:name=".GcmMessageHandler" />
+    <service android:name=".GCMIntentService" />
+
+    </application>
+
+</manifest>

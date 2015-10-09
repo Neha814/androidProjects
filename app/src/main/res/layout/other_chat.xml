@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="start"
+        android:padding="3dp"
+        android:visibility="gone"
+        android:singleLine="true"
+        android:text="23/45/5666"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:textStyle="italic" />
+
+    <RelativeLayout
+        android:id="@+id/chat_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="6dp"
+            android:ellipsize="start"
+            android:padding="3dp"
+            android:singleLine="true"
+            android:text="Pulkit"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/name"
+            android:layout_gravity="center"
+            android:layout_margin="5dip"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/chatboxleft"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="34dp"
+            android:paddingTop="10dp"
+            android:text="sdjfdhjdh cjj jvbjv cvj gfgsss asfsa ASds"
+            android:textColor="#000000" />
+    </RelativeLayout>
+
+    <!-- android:background="#579afe" -->
+
+</LinearLayout>
