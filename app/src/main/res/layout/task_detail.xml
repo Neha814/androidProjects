@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    android:orientation="vertical"
-    android:weightSum="10" >
+    android:weightSum="10"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.7" >
+        android:layout_weight="1.7">
 
         <LinearLayout
             android:id="@+id/back_ll"
@@ -18,7 +18,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:gravity="center" >
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/back"
@@ -42,13 +42,13 @@
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp" >
+            android:layout_marginRight="5dp">
 
             <LinearLayout
                 android:id="@+id/ll_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center" >
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/edit"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:visibility="invisible" >
+                android:visibility="invisible">
 
                 <ImageView
                     android:id="@+id/del"
@@ -79,7 +79,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/frame"
-            android:gravity="center" >
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/delete"
@@ -92,15 +92,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8.3" >
+        android:layout_weight="8.3">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingBottom="15dp">
 
             <!--
                  <ImageView
@@ -123,10 +121,51 @@
                 android:textSize="22dp"
                 android:textStyle="bold" />
 
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_orange"
+                android:orientation="horizontal"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:weightSum="10">
+
+                <EditText
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7.5"
+                    android:background="@null"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:text="dcvc"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:gravity="right"
+                    android:background="@null"
+
+                    android:ems="6"
+                    android:enabled="false"
+                    android:text="50"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:layout_marginRight="20dp"/>
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" >
+                android:layout_marginTop="20dp">
 
                 <!-- ******** category name ****************** -->
 
@@ -138,14 +177,14 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/c_static"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Category : "
-                        android:textColor="@color/yellow"
+                        android:textColor="@color/white"
                         android:textSize="15dp"
                         android:textStyle="bold" />
 
@@ -159,44 +198,26 @@
                         android:textSize="15dp" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+
+                    android:id="@+id/ll"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_below="@+id/cat_layout"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="8dp"
-                    android:background="@null"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:text="Image design for website"
-                    android:textColor="@color/yellow"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:weightSum="10">
 
-                <EditText
-                    android:id="@+id/price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/cat_layout"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/title"
-                    android:background="@null"
-                    android:drawableLeft="@drawable/price_sign"
-                    android:drawablePadding="4dp"
-                    android:ems="6"
-                    android:enabled="false"
-                    android:text="50"
-                    android:textColor="@color/white"
-                    android:textSize="15dp" />
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/title"
+                    android:layout_below="@+id/ll"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="8dp"
@@ -213,7 +234,7 @@
                     android:layout_height="0.5dp"
                     android:layout_below="@+id/description"
                     android:layout_marginTop="8dp"
-                    android:background="@color/white" />
+                    android:background="@color/dark_orange" />
 
                 <TextView
                     android:id="@+id/text4"
@@ -225,7 +246,7 @@
                     android:drawableLeft="@drawable/pole"
                     android:drawablePadding="6dp"
                     android:text="Address"
-                    android:textColor="@color/yellow"
+                    android:textColor="@color/white"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
@@ -244,7 +265,7 @@
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                
+
                 <EditText
                     android:id="@+id/city"
                     android:layout_width="wrap_content"
@@ -255,10 +276,10 @@
                     android:layout_marginTop="8dp"
                     android:background="@null"
                     android:ems="10"
-                    android:textSize="15dp"
                     android:enabled="false"
                     android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
 
                 <EditText
                     android:id="@+id/state"
@@ -270,10 +291,10 @@
                     android:layout_marginTop="8dp"
                     android:background="@null"
                     android:ems="10"
-                    android:textSize="15dp"
                     android:enabled="false"
                     android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
 
                 <EditText
                     android:id="@+id/country"
@@ -285,10 +306,10 @@
                     android:layout_marginTop="8dp"
                     android:background="@null"
                     android:ems="10"
-                    android:textSize="15dp"
                     android:enabled="false"
                     android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
 
                 <EditText
                     android:id="@+id/zipcode"
@@ -303,7 +324,7 @@
                     android:enabled="false"
                     android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
                     android:textColor="@color/white" />
-                
+
 
                 <View
                     android:id="@+id/view2"
@@ -311,7 +332,7 @@
                     android:layout_height="0.5dp"
                     android:layout_below="@+id/zipcode"
                     android:layout_marginTop="8dp"
-                    android:background="@color/white" />
+                    android:background="@color/dark_orange" />
 
                 <TextView
                     android:id="@+id/text6"
@@ -322,7 +343,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="10dp"
                     android:text="Task to be completed by"
-                    android:textColor="@color/yellow"
+                    android:textColor="@color/white"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
@@ -341,10 +362,35 @@
                     android:textSize="15dp" />
 
                 <TextView
+                    android:id="@+id/text7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/date"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Comments"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text7"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:text="Comments"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <TextView
                     android:id="@+id/text8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/date"
+                    android:layout_below="@+id/comments"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="8dp"
@@ -359,7 +405,7 @@
                     android:layout_height="0.5dp"
                     android:layout_below="@+id/text8"
                     android:layout_marginTop="8dp"
-                    android:background="@color/white" />
+                    android:background="@color/dark_orange" />
 
                 <!-- ************* attachment *************** -->
 
@@ -373,7 +419,7 @@
                     android:drawableLeft="@drawable/attach_icon"
                     android:drawablePadding="6dp"
                     android:text="Attachment"
-                    android:textColor="@color/yellow"
+                    android:textColor="@color/white"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
@@ -385,11 +431,53 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="8dp"
                     android:text="Attachment"
-                android:textColor="@drawable/textview_selector_white_default"
+                    android:textColor="@drawable/textview_selector_white_default"
                     android:textSize="15dp" />
 
                 <!-- ***************************************** -->
+                <TextView
+                    android:id="@+id/file_name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Attachment"
+                    android:textColor="@drawable/textview_selector_white_default"
+                    android:textSize="15dp" />
 
+                <TextView
+                    android:id="@+id/file_name3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name2"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Attachment"
+                    android:textColor="@drawable/textview_selector_white_default"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/file_name4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name3"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Attachment"
+                    android:textColor="@drawable/textview_selector_white_default"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/file_name5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name4"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Attachment"
+                    android:textColor="@drawable/textview_selector_white_default"
+                    android:textSize="15dp" />
 
                 <!-- **************************************** -->
 
@@ -397,17 +485,17 @@
                     android:id="@+id/price_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/file_name"
+                    android:layout_below="@+id/file_name5"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="11dp"
                     android:orientation="horizontal"
-                    android:weightSum="10" >
+                    android:weightSum="10">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3" >
+                        android:layout_weight="3">
 
                         <TextView
                             android:id="@+id/text_static"
@@ -422,13 +510,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="7"
-                        android:orientation="vertical" >
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="horizontal" >
+                            android:orientation="horizontal">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -490,7 +578,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/message"
-                    android:layout_marginTop="12dp" >
+                    android:layout_marginTop="12dp">
 
                     <Button
                         android:id="@+id/Done"
@@ -508,6 +596,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button"
                         android:text="Apply"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         android:textAllCaps="false"
                         android:textColor="@color/black"
                         android:visibility="gone" />

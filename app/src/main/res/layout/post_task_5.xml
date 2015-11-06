@@ -5,12 +5,12 @@
     android:background="@drawable/bg"
     android:orientation="vertical"
 
-    android:weightSum="10" >
+    android:weightSum="10">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2" >
+        android:layout_weight="2">
 
         <LinearLayout
             android:id="@+id/back_ll"
@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:gravity="center" >
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/back"
@@ -41,19 +41,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:paddingBottom="10dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-         android:layout_height="50dp"
+                android:layout_height="50dp"
                 android:orientation="horizontal"
-                android:weightSum="6" >
+                android:weightSum="6">
 
                 <LinearLayout
                     android:id="@+id/l1"
@@ -63,7 +63,7 @@
                     android:gravity="top"
                     android:orientation="vertical"
                     android:paddingLeft="4dp"
-                    android:paddingRight="2dp" >
+                    android:paddingRight="2dp">
 
                     <View
                         android:id="@+id/post1"
@@ -87,7 +87,7 @@
                     android:gravity="top"
                     android:orientation="vertical"
                     android:paddingLeft="2dp"
-                    android:paddingRight="2dp" >
+                    android:paddingRight="2dp">
 
                     <View
                         android:id="@+id/post2"
@@ -111,7 +111,7 @@
                     android:gravity="top"
                     android:orientation="vertical"
                     android:paddingLeft="2dp"
-                    android:paddingRight="2dp" >
+                    android:paddingRight="2dp">
 
                     <View
                         android:id="@+id/post3"
@@ -135,7 +135,7 @@
                     android:gravity="top"
                     android:orientation="vertical"
                     android:paddingLeft="2dp"
-                    android:paddingRight="2dp" >
+                    android:paddingRight="2dp">
 
                     <View
                         android:id="@+id/post4"
@@ -159,7 +159,7 @@
                     android:gravity="top"
                     android:orientation="vertical"
                     android:paddingLeft="2dp"
-                    android:paddingRight="2dp" >
+                    android:paddingRight="2dp">
 
                     <View
                         android:id="@+id/post5"
@@ -183,7 +183,7 @@
                     android:gravity="top"
                     android:orientation="vertical"
                     android:paddingLeft="2dp"
-                    android:paddingRight="4dp" >
+                    android:paddingRight="4dp">
 
                     <View
                         android:id="@+id/post6"
@@ -199,16 +199,40 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               >
+
             <TextView
                 android:id="@+id/task"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="30dp"
+                android:layout_alignParentLeft="true"
                 android:text="File(s) (optional)"
                 android:textColor="@color/yellow"
                 android:textSize="18dp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/l_1"
+                android:layout_width="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="60dp"
+
+                android:layout_height="40dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/c_1_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:src="@drawable/cancel" />
+            </LinearLayout>
+
+            </RelativeLayout>
 
             <!-- ************* 1st attachment ************ -->
 
@@ -217,9 +241,9 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -240,17 +264,18 @@
                     android:textColorHint="@color/white" />
 
                 <LinearLayout
-                    android:id="@+id/attachment_layout"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:gravity="center" >
+                    android:id="@+id/c_l_1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:visibility="gone"
+                    android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/attachment"
+                        android:id="@+id/c_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:src="@drawable/add_file" />
+
+                        android:src="@drawable/cancel" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -264,7 +289,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -284,12 +309,21 @@
                     android:singleLine="true"
                     android:textColorHint="@color/white" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/add_file"
-                    android:visibility="invisible" />
+                <LinearLayout
+                    android:id="@+id/c_l_2"
+                    android:layout_width="40dp"
+                    android:visibility="gone"
+                    android:layout_height="40dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                            android:id="@+id/c_2"
+
+                        android:src="@drawable/cancel"
+                        android:visibility="visible" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- ************ 3RD  attachment ************************** -->
@@ -302,7 +336,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -322,12 +356,20 @@
                     android:singleLine="true"
                     android:textColorHint="@color/white" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/add_file"
-                    android:visibility="invisible" />
+                <LinearLayout
+                    android:id="@+id/c_l_3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:visibility="gone"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/c_3"
+                        android:src="@drawable/cancel"
+                        android:visibility="visible" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- ****************** 4th attachment ********************** -->
@@ -340,7 +382,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -360,12 +402,20 @@
                     android:singleLine="true"
                     android:textColorHint="@color/white" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/add_file"
-                    android:visibility="invisible" />
+                <LinearLayout
+                    android:id="@+id/c_l_4"
+                    android:layout_width="40dp"
+                    android:visibility="gone"
+                    android:layout_height="40dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/c_4"
+                        android:src="@drawable/cancel"
+                        android:visibility="visible" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- ***************** 5th attachment ************************* -->
@@ -378,7 +428,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -398,12 +448,20 @@
                     android:singleLine="true"
                     android:textColorHint="@color/white" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/add_file"
-                    android:visibility="invisible" />
+                <LinearLayout
+                    android:id="@+id/c_l_5"
+                    android:layout_width="40dp"
+                    android:visibility="gone"
+                    android:layout_height="40dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/c_5"
+                        android:src="@drawable/cancel"
+                        android:visibility="visible" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- ********************************************************** -->
@@ -423,7 +481,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <Spinner
                     android:id="@+id/category_spinner"

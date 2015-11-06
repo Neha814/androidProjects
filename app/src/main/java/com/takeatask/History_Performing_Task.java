@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,14 +24,16 @@ import android.widget.TextView;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import functions.Constants;
 import functions.Functions;
 import utils.NetConnection;
 import utils.TransparentProgressDialog;
 
-public class History_Performing_Task extends Activity implements OnClickListener{
+public class History_Performing_Task extends Activity implements OnClickListener {
 	
 	ListView listview;
 
@@ -285,22 +288,24 @@ public class History_Performing_Task extends Activity implements OnClickListener
 				convertView = mInflater.inflate(R.layout.history_listitem, null);
 
 				holder.title = (TextView) convertView.findViewById(R.id.title);
-				holder.description = (TextView) convertView
-						.findViewById(R.id.description);
+				holder.description = (TextView) convertView.findViewById(R.id.description);
+                holder.ll = (LinearLayout) convertView.findViewById(R.id.ll);
 				holder.price = (TextView) convertView.findViewById(R.id.price);
 				
-				holder.view_profile = (TextView) convertView.findViewById(R.id.view_profile);
+				holder.view_task_detail = (TextView) convertView.findViewById(R.id.view_task_detail);
 
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
 			
-			holder.view_profile.setTag(position);
+			holder.view_task_detail.setTag(position);
+            holder.ll.setTag(position);
+
 			
-			SpannableString content1 = new SpannableString("View Profile");
-			content1.setSpan(new UnderlineSpan(), 0, content1.length(), 0);
-			holder.view_profile.setText(content1);
+			SpannableString content = new SpannableString("View Task Details");
+			content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+			holder.view_task_detail.setText(content);
 			
 			holder.title.setText(currentPostedList.get(position).get("title"));
 			holder.description.setText(currentPostedList.get(position).get(
@@ -308,20 +313,79 @@ public class History_Performing_Task extends Activity implements OnClickListener
 			holder.price.setText("$ "
 					+ currentPostedList.get(position).get("price"));
 			
-			holder.view_profile.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					int pos = (Integer) v.getTag();
-					Constants.VIEW_PROFILE_ID = currentPostedList.get(pos).get("user_id");
-				ViewProfile();
-				}
-			});
+			holder.view_task_detail.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    int pos = (Integer) v.getTag();
+
+					goToTaskDetailHistory(pos);
+
+
+                }
+            });
+
+            holder.ll.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = (Integer) view.getTag();
+
+                    goToTaskDetailHistory(pos);
+
+
+                }
+            });
 
 			return convertView;
 		}
 
-		protected void ViewProfile() {
+        private void goToTaskDetailHistory(int pos) {
+
+            Constants.TASK_DETAIL_ADDRESS = currentPostedList.get(pos).get("address");
+
+            Constants.TASK_DETAIL_CITY = currentPostedList.get(pos).get("city");
+            Constants.TASK_DETAIL_STATE = currentPostedList.get(pos).get("state");
+            Constants.TASK_DETAIL_COUNTRY = currentPostedList.get(pos).get("country");
+            Constants.TASK_DETAIL_ZIPCODE = currentPostedList.get(pos).get("zipcode");
+
+
+            Constants.TASK_DETAIL_DATE = currentPostedList.get(pos).get("due_date");
+
+            Constants.TASK_DETAIL_DESC = currentPostedList.get(pos).get("description");
+            Constants.TASK_DETAIL_PRICE = currentPostedList.get(pos).get("price");
+            Constants.TASK_DETAIL_TITLE = currentPostedList.get(pos).get("title");
+           // Constants.TASK_DETAIL_URL = currentPostedList.get(pos).get("file");
+            Constants.TASK_DETAIL_USERID = currentPostedList.get(pos).get("user_id");
+            Constants.TASK_DETAIL_ID = currentPostedList.get(pos).get("task_id");
+            Constants.TASK_DETAIL_FNAME = currentPostedList.get(pos).get("fname");
+            Constants.TASK_DETAIL_LNAME = currentPostedList.get(pos).get("lname");
+            Constants.TASK_DETAIL_CATNAME = currentPostedList.get(pos).get("category_name");
+            Constants.TASK_DETAIL_SUBCATNAME = currentPostedList.get(pos).get("subcategory_name");
+            Constants.TASK_DETAIL_ACCEPTED = "";
+            Constants.TASK_DETAIL_TASKER_POSTER_NAME = "";
+            Constants.TASK_DETAIL_TASKER_POSTER_ID = "";
+
+			Constants.TASK_DETAIL_COMMENTS = currentPostedList.get(pos).get("comments");
+
+            String attachmentListString  = currentPostedList.get(pos).get("attachments");
+
+            String str = attachmentListString;
+            List<String> attachmentList = Arrays.asList(str.split(","));
+
+
+            Constants.TASK_DETAIL_ATTACHMENT_1 = attachmentList.get(0);
+            Constants.TASK_DETAIL_ATTACHMENT_2 = attachmentList.get(1);
+            Constants.TASK_DETAIL_ATTACHMENT_3 = attachmentList.get(2);
+            Constants.TASK_DETAIL_ATTACHMENT_4 = attachmentList.get(3);
+            Constants.TASK_DETAIL_ATTACHMENT_5 = attachmentList.get(4);
+
+			Log.e("**** attch 1 ****", "" + Constants.TASK_DETAIL_ATTACHMENT_1);
+
+            Intent i = new Intent(History_Performing_Task.this, TaskDetailHistory.class);
+            startActivity(i);
+        }
+
+        protected void ViewProfile() {
 			Intent i = new Intent(History_Performing_Task.this , ViewProfile.class);
 			startActivity(i);
 		}
@@ -329,7 +393,9 @@ public class History_Performing_Task extends Activity implements OnClickListener
 		class ViewHolder {
 			TextView title, description, price ;
 			
-			TextView view_profile;
+			TextView view_task_detail;
+
+			LinearLayout ll;
 
 		}
 

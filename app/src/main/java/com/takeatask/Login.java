@@ -19,7 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,15 +52,17 @@ public class Login extends Activity implements OnClickListener {
 	EditText usernameET;
 	EditText passwordET;
 	TextView forgot_password, register_here, take_task;
-	LinearLayout sign_in;
+	RelativeLayout sign_in, fb_sign_in;
 	Button fb_login;
-
+    String FB_URL="";
 	Button login;
 	GPSTracker gps;
 
 	TransparentProgressDialog db;
 	SharedPreferences sp;
 	Boolean isConnected;
+
+    String FIRSTNAME="" , LASTNAME="";
 
 	// Instance of Facebook Class
 	String APP_ID = "1443617225937981";
@@ -90,7 +92,8 @@ public class Login extends Activity implements OnClickListener {
 		register_here = (TextView) findViewById(R.id.register_here);
 		take_task = (TextView) findViewById(R.id.take_task);
 		fb_login = (Button) findViewById(R.id.fb_login);
-		sign_in = (LinearLayout) findViewById(R.id.sign_in);
+		sign_in = (RelativeLayout) findViewById(R.id.sign_in);
+		fb_sign_in = (RelativeLayout) findViewById(R.id.fb_sign_in);
 
 		SpannableString content1 = new SpannableString("Register Here");
 		content1.setSpan(new UnderlineSpan(), 0, content1.length(), 0);
@@ -111,23 +114,34 @@ public class Login extends Activity implements OnClickListener {
 		register_here.setOnClickListener(this);
 		forgot_password.setOnClickListener(this);
 		take_task.setOnClickListener(this);
+		fb_sign_in.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
+
+		Editor e = sp.edit();
 		if (v == login || v == sign_in) {
+			e.putString("withLogin","true");
+			e.commit();
 			callLoginAPI();
 		} else if (v == register_here) {
+			e.putString("withLogin","true");
+			e.commit();
 			Intent i = new Intent(Login.this, Register.class);
 			startActivity(i);
-		} else if (v == fb_login) {
+		} else if (v == fb_login || v==fb_sign_in) {
+			e.putString("withLogin","true");
+			e.commit();
 			FacebookLogin();
 		} else if (v == forgot_password) {
 			Intent i = new Intent(Login.this, ForgotPassword.class);
 			startActivity(i);
 		} else if (v == take_task) {
+			e.putString("withLogin","false");
+			e.commit();
 			// Intent i = new Intent(Login.this , TakeALook.class);
-			Intent i = new Intent(Login.this, Home.class);
+			Intent i = new Intent(Login.this, TakeATaskCopy.class);
 			startActivity(i);
 		}
 
@@ -214,8 +228,16 @@ public class Login extends Activity implements OnClickListener {
 					final String name = profile.getString("name");
 					final String id = profile.getString("id");
 
+                   // https://graph.facebook.com/10208017932796245/picture?type=large
+
+                    FB_URL =  "https://graph.facebook.com/" + id + "/picture?type=large";
+
+
 					final String firstname = profile.getString("first_name");
 					final String lastname = profile.getString("last_name");
+
+                    FIRSTNAME = firstname;
+                    LASTNAME = lastname;
 
 					// getting email of the user
 					final String email = profile.getString("email");
@@ -234,11 +256,13 @@ public class Login extends Activity implements OnClickListener {
 							 * 
 							 * e.commit();
 							 */
+
+
 							Toast.makeText(getApplicationContext(),
 									"Login successfull.", Toast.LENGTH_LONG)
 									.show();
 
-							new LoginTaskFB(name, email, id)
+							new LoginTaskFB(name, email, id,firstname,lastname)
 									.execute(new Void[0]);
 						}
 
@@ -371,18 +395,22 @@ public class Login extends Activity implements OnClickListener {
 
 					Constants.USER_ID = (String) result.get("user_id");
 					Constants.EMAIL = (String) result.get("email");
+                    Constants.LOGIN_TYPE = (String) result.get("login_via");
 					Constants.TYPE = "mannual";
 
 					Editor e = sp.edit();
 					e.putString("email", Constants.EMAIL);
 					e.putString("user_id", Constants.USER_ID);
 					e.putString("type", Constants.TYPE);
+                    e.putString("login_type",Constants.LOGIN_TYPE);
 					e.commit();
 
 					Intent i = new Intent(Login.this, Home.class);
 					startActivity(i);
 				} else if (result.get("ResponseCode").equals("false")) {
-					showDialog("Invalid email or password.");
+					String msg = (String) result.get("Message");
+					//showDialog("Invalid email or password.");
+                    showDialog(msg);
 				}
 			}
 
@@ -408,14 +436,16 @@ public class Login extends Activity implements OnClickListener {
 
 		ArrayList localArrayList = new ArrayList();
 
-		String username, email, token_id, fb_id;
+		String username, email, token_id, fb_id , FNAME , LNAME;
 
 		Double lat, lng;
 
-		public LoginTaskFB(String name, String email2, String id) {
+		public LoginTaskFB(String name, String email2, String id,String fNAME , String lNAME) {
 			this.username = name;
 			this.email = email2;
 			this.fb_id = id;
+            this.FNAME = fNAME;
+            this.LNAME = lNAME;
 			/*this.token_id = Secure.getString(getApplicationContext()
 					.getContentResolver(), Secure.ANDROID_ID);*/
 			
@@ -472,18 +502,22 @@ public class Login extends Activity implements OnClickListener {
 
 					Constants.USER_ID = (String) result.get("user_id");
 					Constants.EMAIL = (String) result.get("email");
+                    Constants.LOGIN_TYPE = (String) result.get("login_via");
 					Constants.TYPE = "facebook";
 
 					Editor e = sp.edit();
 					e.putString("email", Constants.EMAIL);
 					e.putString("user_id", Constants.USER_ID);
 					e.putString("type", Constants.TYPE);
+                    e.putString("login_type",Constants.LOGIN_TYPE);
 					e.commit();
 
 					Intent i = new Intent(Login.this, Home.class);
 					startActivity(i);
 
-				} else if (result.get("ResponseCode").equals("false")) {
+				}
+
+                else if (result.get("ResponseCode").equals("false")) {
 					new RegisterTaskFB(this.username, this.email,
 							this.token_id, this.fb_id).execute(new Void[0]);
 				}
@@ -534,7 +568,9 @@ public class Login extends Activity implements OnClickListener {
 			}
 		}
 
-		protected Void doInBackground(Void... paramVarArgs) {
+
+
+        protected Void doInBackground(Void... paramVarArgs) {
 
 			/*
 			 * http://phphosting.osvin.net/TakeATask/WEB_API/signup.php?
@@ -545,8 +581,8 @@ public class Login extends Activity implements OnClickListener {
 			 */
 			try {
 				localArrayList.add(new BasicNameValuePair("fname",
-						this.username));
-				localArrayList.add(new BasicNameValuePair("lname", ""));
+						FIRSTNAME));
+				localArrayList.add(new BasicNameValuePair("lname", LASTNAME));
 				localArrayList
 						.add(new BasicNameValuePair("emailId", this.email));
 				localArrayList.add(new BasicNameValuePair("password", ""));
@@ -568,14 +604,17 @@ public class Login extends Activity implements OnClickListener {
 
 				localArrayList.add(new BasicNameValuePair("device_id", "0"));
 				localArrayList.add(new BasicNameValuePair("token_id",
-						this.token_id));
+                        this.token_id));
 				localArrayList.add(new BasicNameValuePair("authkey",
 						"Auth_TakeATask2015"));
+
+                localArrayList
+                        .add(new BasicNameValuePair("fb_pic", FB_URL));
 
 				result = function.register(localArrayList);
 
 			} catch (Exception localException) {
-
+                localException.printStackTrace();
 			}
 
 			return null;
@@ -588,11 +627,13 @@ public class Login extends Activity implements OnClickListener {
 				if (result.get("ResponseCode").equals("true")) {
 					Constants.USER_ID = (String) result.get("user_id");
 					Constants.EMAIL = (String) result.get("email");
+                    Constants.LOGIN_TYPE = (String) result.get("signup_via");
 					Constants.TYPE = "facebook";
 
 					Editor e = sp.edit();
 					e.putString("email", Constants.EMAIL);
 					e.putString("user_id", Constants.USER_ID);
+                    e.putString("login_type",Constants.LOGIN_TYPE);
 					e.putString("type", Constants.TYPE);
 
 					e.commit();
@@ -720,8 +761,10 @@ public class Login extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		return true;
+
 	}
 }

@@ -1,46 +1,19 @@
 package com.takeatask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
-
-import functions.Constants;
-import functions.Functions;
-
-import utils.HttpClientUpload;
-import utils.NetConnection;
-import utils.TransparentProgressDialog;
-import com.imageloader.ImageLoader;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.graphics.Bitmap.CompressFormat;
-
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -51,9 +24,11 @@ import android.support.v4.app.DialogFragment;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -61,6 +36,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.imageloader.ImageLoader;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+import functions.Constants;
+import functions.Functions;
+import utils.HttpClientUpload;
+import utils.NetConnection;
+import utils.TransparentProgressDialog;
 
 public class TaskDetail extends Activity {
 
@@ -88,7 +87,7 @@ public class TaskDetail extends Activity {
 
 	LinearLayout ll_edit, ll_delete, ll_del;
 
-	TextView Message_static, file_name, cat_name;
+	TextView Message_static, file_name, cat_name ,file_name2,file_name3,file_name4,file_name5,comments;
 
 	String addreess, city, state, country, zipcode;
 
@@ -242,7 +241,12 @@ public class TaskDetail extends Activity {
 		Message_static = (TextView) findViewById(R.id.Message_static);
 		bid_price = (EditText) findViewById(R.id.bid_price);
 		file_name = (TextView) findViewById(R.id.file_name);
+        file_name2 = (TextView) findViewById(R.id.file_name2);
+        file_name3 = (TextView) findViewById(R.id.file_name3);
+        file_name4 = (TextView) findViewById(R.id.file_name4);
+        file_name5 = (TextView) findViewById(R.id.file_name5);
 		cat_name = (TextView) findViewById(R.id.cat_name);
+		comments = (TextView) findViewById(R.id.comments);
 
 		cityET = (EditText) findViewById(R.id.city);
 		stateET = (EditText) findViewById(R.id.state);
@@ -261,7 +265,7 @@ public class TaskDetail extends Activity {
 		apply = (Button) findViewById(R.id.apply);
 
 		title.setText(Constants.TASK_DETAIL_TITLE);
-		price.setText(Constants.TASK_DETAIL_PRICE);
+		price.setText("$ "+ Constants.TASK_DETAIL_PRICE);
 		description.setText(Constants.TASK_DETAIL_DESC);
 
 		cityET.setText(Constants.TASK_DETAIL_CITY);
@@ -269,56 +273,19 @@ public class TaskDetail extends Activity {
 		countryET.setText(Constants.TASK_DETAIL_COUNTRY);
 		zipcodeET.setText(Constants.TASK_DETAIL_ZIPCODE);
 
-		if (Constants.TASK_DETAIL_ADDRESS != null
-				&& Constants.TASK_DETAIL_ADDRESS.length() > 0) {
-			addreess = Constants.TASK_DETAIL_ADDRESS;
-			address.setText(addreess);
-			address.setVisibility(View.VISIBLE);
-		} else {
-			addreess = "";
-			address.setVisibility(View.GONE);
-		}
 
-		if (Constants.TASK_DETAIL_CITY != null
-				&& Constants.TASK_DETAIL_CITY.length() > 0) {
-			city = Constants.TASK_DETAIL_CITY;
-			cityET.setText(city);
-			cityET.setVisibility(View.VISIBLE);
-		} else {
-			city = "";
-			cityET.setVisibility(View.GONE);
-		}
 
-		if (Constants.TASK_DETAIL_STATE != null
-				&& Constants.TASK_DETAIL_STATE.length() > 0) {
-			state = Constants.TASK_DETAIL_STATE;
-			stateET.setText(state);
-			stateET.setVisibility(View.VISIBLE);
-		} else {
-			state = "";
-			stateET.setVisibility(View.GONE);
-		}
+        cityET.setVisibility(View.GONE);
+        stateET.setVisibility(View.GONE);
+        countryET.setVisibility(View.GONE);
+        zipcodeET.setVisibility(View.GONE);
 
-		if (Constants.TASK_DETAIL_COUNTRY != null
-				&& Constants.TASK_DETAIL_COUNTRY.length() > 0) {
-			country = Constants.TASK_DETAIL_COUNTRY;
-			countryET.setText(country);
-			countryET.setVisibility(View.VISIBLE);
-		} else {
-			country = "";
-			countryET.setVisibility(View.GONE);
-		}
+        addreess = Constants.TASK_DETAIL_ADDRESS;
+        state = Constants.TASK_DETAIL_STATE;
+        city = Constants.TASK_DETAIL_CITY;
+        zipcode = Constants.TASK_DETAIL_ZIPCODE;
+        country = Constants.TASK_DETAIL_COUNTRY;
 
-		if (Constants.TASK_DETAIL_ZIPCODE != null
-				&& Constants.TASK_DETAIL_ZIPCODE.length() > 0) {
-			zipcode = Constants.TASK_DETAIL_ZIPCODE;
-			
-			zipcodeET.setText(zipcode);
-			zipcodeET.setVisibility(View.VISIBLE);
-		} else {
-			zipcode = "";
-			zipcodeET.setVisibility(View.GONE);
-		}
 		addList.add(addreess);
 		addList.add(city);
 		addList.add(state);
@@ -329,7 +296,10 @@ public class TaskDetail extends Activity {
 		String ADDRESS_TEXT = addList.toString().replace("[", "")
 				.replace("]", "").replace(", ", ", ");
 
-		//address.setText(ADDRESS_TEXT);
+		address.setText(ADDRESS_TEXT);
+
+		comments.setText(Constants.TASK_DETAIL_COMMENTS);
+
 
 		/*
 		 * address.setText(Constants.TASK_DETAIL_ADDRESS+" ,"+Constants.
@@ -375,25 +345,116 @@ public class TaskDetail extends Activity {
 			Message_static.setVisibility(View.VISIBLE);
 
 		}
-
-		if (Constants.TASK_DETAIL_URL != null
-				|| Constants.TASK_DETAIL_URL.length() > 1) {
-			file_name.setText(Constants.TASK_DETAIL_URL);
+		Log.e("******** a 1 ********",""+Constants.TASK_DETAIL_ATTACHMENT_1);
+		if (Constants.TASK_DETAIL_ATTACHMENT_1 != null
+				|| Constants.TASK_DETAIL_ATTACHMENT_1.length() > 1) {
+			file_name.setText(Constants.TASK_DETAIL_ATTACHMENT_1);
 		} else {
 			file_name.setVisibility(View.GONE);
 		}
 
-		// file_name.setText(Constants.TASK_DETAIL_URL);
+        if(Constants.TASK_DETAIL_ATTACHMENT_2.contains("defaultTask.png")){
+            file_name2.setVisibility(View.GONE);
+        } else {
+            file_name2.setText(Constants.TASK_DETAIL_ATTACHMENT_2);
+        }
+
+        if(Constants.TASK_DETAIL_ATTACHMENT_3.contains("defaultTask.png")){
+            file_name3.setVisibility(View.GONE);
+        } else {
+            file_name3.setText(Constants.TASK_DETAIL_ATTACHMENT_3);
+        }
+
+        if(Constants.TASK_DETAIL_ATTACHMENT_4.contains("defaultTask.png")){
+            file_name4.setVisibility(View.GONE);
+        } else {
+            file_name4.setText(Constants.TASK_DETAIL_ATTACHMENT_4);
+        }
+
+        if(Constants.TASK_DETAIL_ATTACHMENT_5.contains("defaultTask.png")){
+            file_name5.setVisibility(View.GONE);
+        } else {
+            file_name5.setText(Constants.TASK_DETAIL_ATTACHMENT_5);
+        }
+
+
 		
 		file_name.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Uri uri = Uri.parse(Constants.TASK_DETAIL_URL); // missing 'http://' will cause crashed
+				try {
+				Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_1); // missing 'http://' will cause crashed
 				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
+        file_name2.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+
+                        Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_2.trim()); // missing 'http://' will cause crashed
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
+
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
+        file_name3.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+                Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_3.trim()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
+        file_name4.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+                Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_4.trim()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
+        file_name5.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+                Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_5.trim()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
 
 		name.setOnClickListener(new OnClickListener() {
 
@@ -628,7 +689,7 @@ public class TaskDetail extends Activity {
 		startEditing = false;
 
 		title.setText(Constants.TASK_DETAIL_TITLE);
-		price.setText(Constants.TASK_DETAIL_PRICE);
+		price.setText("$ "+Constants.TASK_DETAIL_PRICE);
 		description.setText(Constants.TASK_DETAIL_DESC);
 		address.setText(Constants.TASK_DETAIL_ADDRESS);
 
@@ -682,7 +743,7 @@ public class TaskDetail extends Activity {
 
 	}
 
-	public class DatePickerFragment extends DialogFragment implements
+	public  class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
 
 		@Override
@@ -949,7 +1010,7 @@ public class TaskDetail extends Activity {
 				HttpClient httpclient = new DefaultHttpClient();
 
 				HttpClientUpload client = new HttpClientUpload(
-						"http://phphosting.osvin.net/TakeATask/WEB_API/updateTask.php?");
+						"https://takeataskservices.com/WEB_API/updateTask.php?");
 				client.connectForMultipart();
 
 				Log.i("task_id", "" + Constants.TASK_DETAIL_ID);
@@ -1117,5 +1178,13 @@ public class TaskDetail extends Activity {
 			db.show();
 		}
 
+	}
+
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+		return true;
 	}
 }

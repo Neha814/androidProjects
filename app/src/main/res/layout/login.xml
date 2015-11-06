@@ -6,32 +6,33 @@
     android:orientation="vertical"
     android:paddingLeft="30dp"
     android:paddingRight="30dp"
-    android:weightSum="10" >
+    android:weightSum="10">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.3"
-        android:gravity="center" >
+        android:layout_weight="1.6"
+        android:gravity="center">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_marginTop="4dp"
+            android:layout_height="80dp"
             android:src="@drawable/logo" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7.2"
+        android:layout_weight="7.1"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -66,7 +67,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -106,23 +107,36 @@
             android:text="Forgot Password ?"
             android:textColor="@drawable/textview_selector_white_default" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/sign_in"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/login_btn"
-            android:gravity="center" >
+            android:background="@drawable/login_dark_yellow">
+
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/login_light_yellow">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/login_icon"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:background="@null"
+                android:text="Login"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
+
                 android:textSize="@dimen/text_size" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,26 +145,49 @@
             android:text="- Or -"
             android:textColor="@color/yellow" />
 
-        <Button
-            android:id="@+id/fb_login"
+        <RelativeLayout
+            android:id="@+id/fb_sign_in"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/fb_btn"
-            android:textColor="@color/white" />
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/fb_dark_blue">
+
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/fb_light_blue">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/fb_btn"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/fb_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:text="Login with facebook"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size" />
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1.3"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"

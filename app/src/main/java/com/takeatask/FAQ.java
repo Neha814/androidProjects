@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -91,16 +90,7 @@ public class FAQ extends Activity {
 		back = (ImageView) findViewById(R.id.back);
 		back_ll = (LinearLayout) findViewById(R.id.back_ll);
 
-		question.add(Constants.QUESTION1);
-		question.add(Constants.QUESTION2);
-		question.add(Constants.QUESTION3);
-		question.add(Constants.QUESTION4);
-		question.add(Constants.QUESTION5);
-		question.add(Constants.QUESTION6);
-		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-	              R.layout.question_listitem, R.id.text, question);
-		listview.setAdapter(adapter);
+
 		
 		if (isConnected) {
 

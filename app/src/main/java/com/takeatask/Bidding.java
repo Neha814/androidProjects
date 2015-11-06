@@ -231,6 +231,7 @@ public class Bidding extends Activity implements OnClickListener{
 		}*/
 
 		back.setOnClickListener(this);
+        back_ll.setOnClickListener(this);
 	}
 
 
@@ -317,7 +318,7 @@ public class Bidding extends Activity implements OnClickListener{
 
         try {
 
-            client.get("http://phphosting.osvin.net/TakeATask/WEB_API/genrateBraintreeClientToken.php", new AsyncHttpResponseHandler() {
+            client.get("https://takeataskservices.com/WEB_API/genrateBraintreeClientToken.php", new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String content) {
                     clientToken = content;
@@ -375,10 +376,10 @@ public class Bidding extends Activity implements OnClickListener{
 				holder.price = (TextView) convertView.findViewById(R.id.price);
 				holder.name = (TextView) convertView.findViewById(R.id.name);
 				holder.accept = (Button) convertView.findViewById(R.id.accept);
-				holder.decline = (Button) convertView
-						.findViewById(R.id.decline);
-				holder.message = (TextView) convertView
-						.findViewById(R.id.message);
+				holder.decline = (Button) convertView.findViewById(R.id.decline);
+				holder.message = (TextView) convertView.findViewById(R.id.message);
+				holder.chat = (Button) convertView.findViewById(R.id.chat);
+				holder.name1 = (TextView) convertView.findViewById(R.id.name1);
 
 				convertView.setTag(holder);
 			} else {
@@ -388,15 +389,17 @@ public class Bidding extends Activity implements OnClickListener{
 			holder.accept.setTag(position);
 			holder.decline.setTag(position);
 			holder.name.setTag(position);
-
+			holder.chat.setTag(position);
 
 			holder.price
-					.setText(" $ " + biddingList.get(position).get("price"));
+					.setText(" applied for the task with price $ " + biddingList.get(position).get("price"));
 			
 			
 			SpannableString content1 = new SpannableString(biddingList.get(position).get("fname"));
 			content1.setSpan(new UnderlineSpan(), 0, content1.length(), 0);
 			holder.name.setText(content1);
+
+            holder.name1.setText(biddingList.get(position).get("fname"));
 
 //			holder.name.setText(biddingList.get(position).get("fname"));
 
@@ -404,16 +407,32 @@ public class Bidding extends Activity implements OnClickListener{
 					+ biddingList.get(position).get("message"));
 			
 			holder.name.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					
+
 					int pos = (Integer) v.getTag();
 					Constants.VIEW_PROFILE_ID = biddingList.get(pos).get(
 							"user_id");
-				
-						Intent i = new Intent(Bidding.this , ViewProfile.class);
-						startActivity(i);
+
+					Intent i = new Intent(Bidding.this, ViewProfile.class);
+					startActivity(i);
+				}
+			});
+
+			holder.chat.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					int pos = (Integer) view.getTag();
+
+					Constants.RECEIVER_ID = biddingList.get(pos).get("user_id");
+					Constants.CHAT_NAME = biddingList.get(pos).get("fname") + " "
+							+ biddingList.get(pos).get("lname");
+					Constants.CHAT_IMAGE = biddingList.get(pos).get("profile_pic");
+					Constants.SENDER_ID = Constants.USER_ID;
+
+					Intent i = new Intent(Bidding.this, ChatScreen.class);
+					startActivity(i);
 				}
 			});
 
@@ -455,23 +474,58 @@ public class Bidding extends Activity implements OnClickListener{
 
 		}
 
-		protected void DeclineBid(String reqID) {
+		public void DeclineBid(final String reqID) {
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(Bidding.this);
 
-			String re_id = reqID;
+			// Setting Dialog Title
+			alertDialog.setTitle("Exit...");
 
-			if (isConnected) {
+			// Setting Dialog Message
+			alertDialog.setMessage("Are you sure you want to Decline this Task ?");
 
-				new DeclineBid(re_id).execute(new Void[0]);
-			} else {
-				showDialog(Constants.No_INTERNET);
-			}
+			// Setting Icon to Dialog
+			//alertDialog.setIcon(R.drawable.alarm);
 
+			// Setting Positive "Yes" Button
+			alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int which) {
+
+					dialog.cancel();
+
+                    String re_id = reqID;
+
+                    if (isConnected) {
+
+                        new DeclineBid(re_id).execute(new Void[0]);
+                    } else {
+                        showDialog(Constants.No_INTERNET);
+                    }
+
+
+				}
+			});
+
+			// Setting Negative "NO" Button
+			alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Write your code here to invoke NO event
+
+					dialog.cancel();
+				}
+			});
+
+			// Showing Alert Message
+			alertDialog.show();
 		}
 
+
+
 		class ViewHolder {
-			TextView name, price, message;
+			TextView name, name1 ,price, message;
 
 			Button accept, decline;
+
+			Button chat;
 
 		}
 
@@ -543,16 +597,17 @@ public class Bidding extends Activity implements OnClickListener{
 				if (result.get("ResponseCode").equals("true")) {
 
 					isSuccess = true;
-					/*Toast.makeText(getApplicationContext(),
-							"Accepted Successfully..", Toast.LENGTH_SHORT)
-							.show();*/
-					Intent i = new Intent(Bidding.this , Home.class);
+					Toast.makeText(getApplicationContext(),
+							"Task Accepted Successfully..", Toast.LENGTH_SHORT)
+							.show();
+
+                    Intent i = new Intent(Bidding.this , Home.class);
                     startActivity(i);
 				} else if (result.get("ResponseCode").equals("false")) {
 					isSuccess = false;
 
 					Toast.makeText(getApplicationContext(),
-							"Already accepted.", Toast.LENGTH_SHORT).show();
+							"Something went wrong.", Toast.LENGTH_SHORT).show();
 
 				}
 
@@ -621,10 +676,15 @@ public class Bidding extends Activity implements OnClickListener{
 					isSuccess = true;
 
 					String msg = (String) result.get("Message");
-					showDialog(msg);
+					Toast.makeText(getApplicationContext(),"Task Declined successfully.",Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(Bidding.this , Home.class);
+                    startActivity(i);
 				} else if (result.get("ResponseCode").equals("false")) {
-					String msg = (String) result.get("Message");
-					showDialog(msg);
+					/*String msg = (String) result.get("Message");
+					showDialog(msg);*/
+					Toast.makeText(getApplicationContext(),"Something went wrong.",Toast.LENGTH_SHORT).show();
+					Intent i = new Intent(Bidding.this , Home.class);
+					startActivity(i);
 				}
 			}
 
@@ -749,7 +809,7 @@ public class Bidding extends Activity implements OnClickListener{
             requestParams.put("payment_method_nonce", paymentMethodNonce);
             requestParams.put("amount", "10.00");*/
 
-                Toast.makeText(getApplicationContext(), paymentMethodNonce, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), paymentMethodNonce, Toast.LENGTH_LONG).show();
                 Log.e("data==>>", "" + data);
 
            /* client.post(SERVER_BASE + "/payment", requestParams, new AsyncHttpResponseHandler() {

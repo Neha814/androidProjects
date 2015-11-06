@@ -126,27 +126,65 @@ public class PostTask1 extends Activity implements OnClickListener {
 			startActivity(i);
 			}
 		} else if(v==post2 || v==l2){
-			SaveAndGo();
-			Intent i = new Intent(PostTask1.this , PostTask2.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask1.this, PostTask2.class);
+				startActivity(i);
+			}
 		}else if(v==post3 || v==l3){
-			SaveAndGo();
-			Intent i = new Intent(PostTask1.this , PostTask3.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask1.this, PostTask3.class);
+				startActivity(i);
+			}
 		}else if(v==post4 || v==l4){
-			SaveAndGo();
-			Intent i = new Intent(PostTask1.this , PostTask4.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask1.this, PostTask4.class);
+				startActivity(i);
+			}
 		}else if(v==post5 || v==l5){
-			SaveAndGo();
-			Intent i = new Intent(PostTask1.this , PostTask5.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask1.this, PostTask5.class);
+				startActivity(i);
+			}
 		}else if(v==post6 || v==l6){
-			SaveAndGo();
-			Intent i = new Intent(PostTask1.this , PostTask6.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask1.this, PostTask6.class);
+				startActivity(i);
+			}
 		}
 	}
+
+	private boolean ValidateFields() {
+
+		String task_name_text = task_name.getText().toString();
+		String describe_task_text = describe_task.getText().toString();
+
+		SaveInSharedPreferences(task_name_text , describe_task_text);
+		if(task_name_text.trim().length()<1){
+			task_name.setError("Please enter task name.");
+			return false;
+		} else if(describe_task_text.trim().length()<1){
+			describe_task.setError("Please describe something about task.");
+			return false;
+		}
+
+		return  true;
+	}
+
 	private void SaveInSharedPreferences(String task_name_text,
 			String describe_task_text) {
 		Editor e = sp.edit();
@@ -194,6 +232,8 @@ public class PostTask1 extends Activity implements OnClickListener {
 		Constants.COMMENTS = "" ;
 
 		Constants.CAT_POS=0;
+
+		Constants.ATTACHMENTCOUNT = 0;
 		
 		Constants.IMAGE_TO_UPLOAD1 = new File("");
 
@@ -204,6 +244,12 @@ public class PostTask1 extends Activity implements OnClickListener {
 		Constants.IMAGE_TO_UPLOAD4 = new File("");
 
 		Constants.IMAGE_TO_UPLOAD5 = new File("");
+
+		Constants.TAKENIMAGE1 = null;
+		Constants.TAKENIMAGE2 = null;
+		Constants.TAKENIMAGE3 = null;
+		Constants.TAKENIMAGE4 = null;
+		Constants.TAKENIMAGE5 = null;
 
 		Intent i = new Intent(PostTask1.this , Home.class);
 		startActivity(i);

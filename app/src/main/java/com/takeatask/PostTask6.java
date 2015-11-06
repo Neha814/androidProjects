@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,9 +58,13 @@ public class PostTask6 extends Activity implements OnClickListener {
 	LinearLayout l1 ,l2,l3,l4,l5,l6;
 	
 	List<String> addList = new ArrayList<String>();
+
+	List<String> attachmentList = new ArrayList<String>();
 	
 	
 	String addreess , city , state , country , zipcode;
+
+	ImageView img1,img2,img3,img4,img5;
 
 /*	protected void showDialog(String msg) {
 		final Dialog dialog;
@@ -149,6 +154,12 @@ public class PostTask6 extends Activity implements OnClickListener {
 		attachment = (TextView) findViewById(R.id.attachment);
 		comment = (TextView) findViewById(R.id.comment);
 		cat_name = (TextView) findViewById(R.id.cat_name);
+		img1 = (ImageView) findViewById(R.id.img1);
+		img2 = (ImageView) findViewById(R.id.img2);
+		img3 = (ImageView) findViewById(R.id.img3);
+		img4 = (ImageView) findViewById(R.id.img4);
+		img5 = (ImageView) findViewById(R.id.img5);
+
 		
 		cityTV = (TextView) findViewById(R.id.city);
 		stateTV = (TextView) findViewById(R.id.state);
@@ -279,11 +290,30 @@ public class PostTask6 extends Activity implements OnClickListener {
 		} else {
 			
 		}
-		attachment.setText(Constants.IMAGE_TO_UPLOAD1.getName() + "\n"
+
+		attachmentList.clear();
+
+		attachmentList.add(Constants.IMAGE_TO_UPLOAD1.getName());
+		attachmentList.add(Constants.IMAGE_TO_UPLOAD2.getName());
+		attachmentList.add(Constants.IMAGE_TO_UPLOAD3.getName());
+		attachmentList.add(Constants.IMAGE_TO_UPLOAD4.getName());
+		attachmentList.add(Constants.IMAGE_TO_UPLOAD5.getName());
+
+		attachmentList.removeAll(Arrays.asList("", null));
+
+		/*String ATTACHMENT_TEXT = attachmentList.toString().replace("[", "")
+				.replace("]", "").replace(", ", ", ");*/
+
+        String ATTACHMENT_TEXT = attachmentList.toString().replace("[", "")
+                .replace("]", "").replace(", ", "\n");
+
+		/*attachment.setText(Constants.IMAGE_TO_UPLOAD1.getName() + "\n"
 				+ Constants.IMAGE_TO_UPLOAD2.getName() + "\n"
 				+ Constants.IMAGE_TO_UPLOAD3.getName() + "\n"
 				+ Constants.IMAGE_TO_UPLOAD4.getName() + "\n"
-				+ Constants.IMAGE_TO_UPLOAD5.getName());
+				+ Constants.IMAGE_TO_UPLOAD5.getName());*/
+
+		attachment.setText(ATTACHMENT_TEXT);
 		
 		if(Constants.COMMENTS!=null && Constants.COMMENTS.length()>0){
 		comment.setText(Constants.COMMENTS);
@@ -307,6 +337,72 @@ public class PostTask6 extends Activity implements OnClickListener {
 		l4.setOnClickListener(this);
 		l5.setOnClickListener(this);
 		l6.setOnClickListener(this);
+        img1.setOnClickListener(this);
+        img2.setOnClickListener(this);
+        img3.setOnClickListener(this);
+        img4.setOnClickListener(this);
+        img5.setOnClickListener(this);
+
+        // ************  set thumbnail ************************//
+        try {
+        if(img1!=null) {
+
+                img1.setImageBitmap(Constants.TAKENIMAGE1);
+
+        } else {
+            img1.setVisibility(View.GONE);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(img2!=null) {
+
+                img2.setImageBitmap(Constants.TAKENIMAGE2);
+
+            } else {
+                img2.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(img3!=null) {
+
+                img3.setImageBitmap(Constants.TAKENIMAGE3);
+
+            } else {
+                img3.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(img4!=null) {
+
+                img4.setImageBitmap(Constants.TAKENIMAGE4);
+
+            } else {
+                img4.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(img5!=null) {
+
+                img5.setImageBitmap(Constants.TAKENIMAGE5);
+
+            } else {
+                img5.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 
 	@Override
@@ -317,7 +413,30 @@ public class PostTask6 extends Activity implements OnClickListener {
 			
 			Intent i = new Intent(PostTask6.this , PostTask5.class);
 			startActivity(i);
-		} else if (v == continue_btn) {
+		}
+        else if(v==img1){
+            Constants.image_number = 1;
+            Intent i = new Intent(PostTask6.this , ViewImage.class);
+            startActivity(i);
+        }else if(v==img2){
+            Constants.image_number = 2;
+            Intent i = new Intent(PostTask6.this , ViewImage.class);
+            startActivity(i);
+        }else if(v==img3){
+            Constants.image_number = 3;
+            Intent i = new Intent(PostTask6.this , ViewImage.class);
+            startActivity(i);
+        }else if(v==img4){
+            Constants.image_number = 4;
+            Intent i = new Intent(PostTask6.this , ViewImage.class);
+            startActivity(i);
+        }else if(v==img5){
+            Constants.image_number = 5;
+            Intent i = new Intent(PostTask6.this , ViewImage.class);
+            startActivity(i);
+        }
+
+        else if (v == continue_btn) {
 			
 
 			if (isConnected) {
@@ -366,6 +485,9 @@ public class PostTask6 extends Activity implements OnClickListener {
 				country, zipcode, comments, lat, lng, date, price, cat_id,
 				cat_name;
 
+
+		int maxBufferSize = 5 * 1024 * 1024;
+
 		public PostTask(String aUTH_KEY, String uSER_ID, String tASK_NAME,
 				String dESCRIBE_TASK, String aDDRESS, String cITY,
 				String sTATE, String cOUNTRY, String zIPCODE, String cOMMENTS,
@@ -404,7 +526,9 @@ public class PostTask6 extends Activity implements OnClickListener {
 			try {
 				baos = new ByteArrayOutputStream();
 				Constants.TAKENIMAGE.compress(CompressFormat.PNG, 100, baos);
-			}
+
+
+            }
 
 			catch (Exception e) {
 				Log.e("excptn==", "" + e);
@@ -414,7 +538,7 @@ public class PostTask6 extends Activity implements OnClickListener {
 				HttpClient httpclient = new DefaultHttpClient();
 
 				HttpClientUpload client = new HttpClientUpload(
-						"http://phphosting.osvin.net/TakeATask/WEB_API/addTask.php?");
+						"https://takeataskservices.com/WEB_API/addTask.php?");
 				client.connectForMultipart();
 
 				 /* http://phphosting.osvin.net/TakeATask/WEB_API/addTask.php?
@@ -470,32 +594,127 @@ public class PostTask6 extends Activity implements OnClickListener {
 					 * attachment5
 					 */
 
-					Log.e("if ifi ifi fifif", "if if ifi ifi if");
+
+                    /*********************** attachment 1 ***********************/
+
+					Log.e("111", "111");
+                    Log.e("name111", ""+Constants.IMAGE_TO_UPLOAD1.getName());
+
+                    int bytesRead, bytesAvailable, bufferSize;
+                    byte[] buffer;
+
+                    FileInputStream fileInputStream = new FileInputStream(Constants.IMAGE_TO_UPLOAD1);
+                    bytesAvailable = fileInputStream.available();
+
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    buffer = new byte[bufferSize];
+
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+
 
 					client.addFilePart("attachment1",
-							Constants.IMAGE_TO_UPLOAD1.getName(),
-							baos.toByteArray());
+                            Constants.IMAGE_TO_UPLOAD1.getName(), buffer);
 				}
+
+                /*********************** attachment 2 ***********************/
+
+
 				if(!(Constants.IMAGE_TO_UPLOAD2.getName().equals("") || Constants.IMAGE_TO_UPLOAD2
 						.getName() == null)){
+
+                    int bytesRead, bytesAvailable, bufferSize;
+                    byte[] buffer;
+
+                    FileInputStream fileInputStream = new FileInputStream(Constants.IMAGE_TO_UPLOAD2);
+                    bytesAvailable = fileInputStream.available();
+
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    buffer = new byte[bufferSize];
+
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+					Log.e("222", "222");
+                    Log.e("name222", "" + Constants.IMAGE_TO_UPLOAD2.getName());
+
+
+
 					client.addFilePart("attachment2",
-							Constants.IMAGE_TO_UPLOAD2.getName(),
-							baos.toByteArray());
-				} if(!(Constants.IMAGE_TO_UPLOAD3.getName().equals("") || Constants.IMAGE_TO_UPLOAD3
+							Constants.IMAGE_TO_UPLOAD2.getName(), buffer);
+				}
+
+                /*********************** attachment 3 ***********************/
+
+				if(!(Constants.IMAGE_TO_UPLOAD3.getName().equals("") || Constants.IMAGE_TO_UPLOAD3
 						.getName() == null)){
+
+                    int bytesRead, bytesAvailable, bufferSize;
+                    byte[] buffer;
+
+                    FileInputStream fileInputStream = new FileInputStream(Constants.IMAGE_TO_UPLOAD3);
+                    bytesAvailable = fileInputStream.available();
+
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    buffer = new byte[bufferSize];
+
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+					Log.e("333", "333");
+                    Log.e("name333", "" + Constants.IMAGE_TO_UPLOAD3.getName());
+
+
+
 					client.addFilePart("attachment3",
 							Constants.IMAGE_TO_UPLOAD3.getName(),
-							baos.toByteArray());
-				}if(!(Constants.IMAGE_TO_UPLOAD4.getName().equals("") || Constants.IMAGE_TO_UPLOAD4
+							buffer);
+				}
+
+                /*********************** attachment 4 ***********************/
+
+				if(!(Constants.IMAGE_TO_UPLOAD4.getName().equals("") || Constants.IMAGE_TO_UPLOAD4
 						.getName() == null)){
+					Log.e("444", "444");
+                    Log.e("name444", ""+Constants.IMAGE_TO_UPLOAD4.getName());
+
+                    int bytesRead, bytesAvailable, bufferSize;
+                    byte[] buffer;
+
+                    FileInputStream fileInputStream = new FileInputStream(Constants.IMAGE_TO_UPLOAD4);
+                    bytesAvailable = fileInputStream.available();
+
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    buffer = new byte[bufferSize];
+
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+
 					client.addFilePart("attachment4",
 							Constants.IMAGE_TO_UPLOAD4.getName(),
-							baos.toByteArray());
-				} if(!(Constants.IMAGE_TO_UPLOAD5.getName().equals("") || Constants.IMAGE_TO_UPLOAD5
+							buffer);
+				}
+
+                /*********************** attachment 5 ***********************/
+
+				if(!(Constants.IMAGE_TO_UPLOAD5.getName().equals("") || Constants.IMAGE_TO_UPLOAD5
 						.getName() == null)){
+					Log.e("555", "555");
+                    Log.e("name555", ""+Constants.IMAGE_TO_UPLOAD5.getName());
+
+                    int bytesRead, bytesAvailable, bufferSize;
+                    byte[] buffer;
+
+                    FileInputStream fileInputStream = new FileInputStream(Constants.IMAGE_TO_UPLOAD5);
+                    bytesAvailable = fileInputStream.available();
+
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    buffer = new byte[bufferSize];
+
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+
 					client.addFilePart("attachment5",
 							Constants.IMAGE_TO_UPLOAD5.getName(),
-							baos.toByteArray());
+							buffer);
 				}
 				
 
@@ -571,6 +790,15 @@ public class PostTask6 extends Activity implements OnClickListener {
 		Constants.IMAGE_TO_UPLOAD4 = new File("");
 
 		Constants.IMAGE_TO_UPLOAD5 = new File("");
+
+        Constants.ATTACHMENTCOUNT = 0;
+
+		Constants.TAKENIMAGE1 = null;
+		Constants.TAKENIMAGE2 = null;
+		Constants.TAKENIMAGE3 = null;
+		Constants.TAKENIMAGE4 = null;
+		Constants.TAKENIMAGE5 = null;
+
 
 
 	}

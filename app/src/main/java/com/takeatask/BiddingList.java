@@ -152,7 +152,8 @@ public class BiddingList extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				finish();
+				Intent i = new Intent(BiddingList.this , Home.class);
+				startActivity(i);
 			}
 		});
 		
@@ -160,10 +161,9 @@ public class BiddingList extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-			/*Intent i = new Intent(BiddingList.this , Home.class);
-			startActivity(i);*/
-				
-				finish();
+			Intent i = new Intent(BiddingList.this , Home.class);
+			startActivity(i);
+
 			}
 		});
 	}
@@ -268,6 +268,7 @@ public class BiddingList extends Activity {
 				holder.description = (TextView) convertView.findViewById(R.id.description);
 				holder.price = (TextView) convertView.findViewById(R.id.price);
 				holder.view_bid = (TextView) convertView.findViewById(R.id.view_bid);
+				holder.ll = (LinearLayout) convertView.findViewById(R.id.ll);
 			
 				convertView.setTag(holder);
 			} else {
@@ -275,12 +276,25 @@ public class BiddingList extends Activity {
 			}
 			
 			holder.view_bid.setTag(position);
+			holder.ll.setTag(position);
 			
 			holder.view_bid.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					
+
+					int position = (Integer) v.getTag();
+					Constants.TASK_ID_TO_GET_BIDDING_LIST = currentPostedList.get(position).get("task_id");
+					Intent i = new Intent(BiddingList.this, Bidding.class);
+					startActivity(i);
+				}
+			});
+
+			holder.ll.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
 					int position = (Integer)v.getTag();
 					Constants.TASK_ID_TO_GET_BIDDING_LIST = currentPostedList.get(position).get("task_id");
 					Intent i = new Intent(BiddingList.this , Bidding.class);
@@ -301,7 +315,7 @@ public class BiddingList extends Activity {
 
 		class ViewHolder {
 			TextView title, description,price ,view_bid;
-
+			LinearLayout ll;
 		}
 
 	}

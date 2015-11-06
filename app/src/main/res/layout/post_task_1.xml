@@ -240,8 +240,10 @@
             android:ems="12"
             android:gravity="top|left"
             android:paddingLeft="6dp"
-              android:inputType="textCapSentences"
-            android:paddingTop="4dp" />
+              android:inputType="textCapSentences|textMultiLine"
+
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
 
         <Button
             android:id="@+id/continue_btn"

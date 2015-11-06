@@ -103,28 +103,60 @@ public class PostTask3 extends Activity implements OnClickListener {
 				startActivity(i);
 			}
 		}else if(v==post1 || v==l1){
-			SaveAndGo();
-			Intent i = new Intent(PostTask3.this , PostTask1.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask3.this, PostTask1.class);
+				startActivity(i);
+			}
 		}else if(v==post2 || v==l2){
-			SaveAndGo();
-			Intent i = new Intent(PostTask3.this , PostTask2.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask3.this, PostTask2.class);
+				startActivity(i);
+			}
 		}else if(v==post4 || v==l4){
-			SaveAndGo();
-			Intent i = new Intent(PostTask3.this , PostTask4.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask3.this, PostTask4.class);
+				startActivity(i);
+			}
 		}else if(v==post5 || v==l5){
-			SaveAndGo();
-			Intent i = new Intent(PostTask3.this , PostTask5.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+
+				Intent i = new Intent(PostTask3.this, PostTask5.class);
+				startActivity(i);
+			}
 		}else if(v==post6 || v==l6){
-			SaveAndGo();
-			Intent i = new Intent(PostTask3.this , PostTask6.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask3.this, PostTask6.class);
+				startActivity(i);
+			}
 		}
 	}
 
+	private boolean ValidateFields() {
+
+		String price_text = price.getText().toString();
+
+		if (price_text.trim().length() < 1) {
+			price.setError("Please enter price");
+			return false;
+		}
+
+		return  true;
+	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

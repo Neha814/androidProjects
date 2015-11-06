@@ -1,17 +1,24 @@
 package com.takeatask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,12 +27,20 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.circularImageview.ScalingUtilities;
 import com.imageloader.ImageLoader;
 
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import functions.Constants;
 import functions.Functions;
@@ -53,6 +68,8 @@ public class ViewProfile extends Activity implements OnClickListener {
 	TextView add_rating;
 
 	TransparentProgressDialog db;
+
+	List<String> addList = new ArrayList<String>();
 
 	/*
 	 * protected void showDialog(String msg) { try { final Dialog dialog; dialog
@@ -216,7 +233,7 @@ public class ViewProfile extends Activity implements OnClickListener {
 					String state_text = (String) result.get("state");
 					String country_text = (String) result.get("country");
 					String ratings_text = (String) result.get("ratings");
-					String profile_text = (String) result.get("profile_pic");
+					final String profile_text = (String) result.get("profile_pic");
 
 					String background = (String) result.get("background");
 					String skills = (String) result.get("skills");
@@ -225,9 +242,23 @@ public class ViewProfile extends Activity implements OnClickListener {
 					String member_date = (String) result.get("member_from");
 
 					name.setText(name_text);
-					location.setText("Location : " + address_text + " ,"
-							+ city_text + " ," + state_text);
-					// about_me.setText("Background : "+background+" .Skills : "+skills+" .occupation : "+occupation);
+					/*location.setText("Location : " + address_text + " ,"
+							+ city_text + " ," + state_text);*/
+
+					addList.clear();
+
+					addList.add(address_text);
+					addList.add(city_text);
+					addList.add(state_text);
+
+
+					addList.removeAll(Arrays.asList("", null));
+
+					String ADDRESS_TEXT = addList.toString().replace("[", "")
+							.replace("]", "").replace(", ", ", ");
+
+					location.setText("Location : " +ADDRESS_TEXT);
+
 					about_me.setText("" + background);
 					rating.setText("Rating : " + ratings_text);
 
@@ -255,8 +286,23 @@ public class ViewProfile extends Activity implements OnClickListener {
 
 					imageLoader.DisplayImage(profile_text, R.drawable.noimg,
 							profile_pic);
-					imageLoader.DisplayImage(profile_text, R.drawable.noimg,
-							blurr_img);
+					/*imageLoader.DisplayImage(profile_text, R.drawable.noimg,
+							blurr_img);*/
+                   /* Thread t = new Thread(){
+                        public void run(){
+                            final Bitmap bitmapToGetFromURL = getBitmapFromURL(profile_text);
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    croppedBitmap(bitmapToGetFromURL);
+                                }
+                            });
+
+                        }
+                    };t.start();
+*/
 
 					try {
 						ratingBar.setRating(Float.parseFloat(ratings_text));
@@ -378,4 +424,155 @@ public class ViewProfile extends Activity implements OnClickListener {
 		}
 
 	}
+
+    private void croppedBitmap(Bitmap takenImage2) {
+
+
+        Bitmap cropedBitmap = null;
+        ScalingUtilities mScalingUtilities = new ScalingUtilities();
+        Bitmap mBitmap = null;
+        if (takenImage2 != null)
+
+        {
+
+            int[] size = getImageHeightAndWidthForProFileImageHomsecreen(ViewProfile.this);
+            cropedBitmap = mScalingUtilities
+                    .createScaledBitmap(takenImage2, size[1],
+                            size[0], ScalingUtilities.ScalingLogic.CROP);
+            //takenImage2.recycle();
+            mBitmap = mScalingUtilities.getCircleBitmap(
+                    cropedBitmap, 1);
+            //cropedBitmap.recycle();
+
+
+
+            profile_pic.setImageBitmap(mBitmap);
+            blurr_img.setImageBitmap(mBitmap);
+        }
+    }
+
+    public static Bitmap getBitmapFromURL(final String src) {
+
+
+        try
+
+        {
+            URL url = null;
+            try {
+                url = new URL(src);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        }
+
+        catch(
+                IOException e
+                )
+
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    //imageLayoutHeightandWidth
+    public int[] getImageHeightAndWidthForProFileImageHomsecreen(
+            Activity activity) {
+        // //Log.i(TAG, "getImageHeightAndWidth");
+
+        int imageHeightAndWidth[] = new int[2];
+        int screenHeight = getHeight(activity);
+        int screenWidth = getWidth(activity);
+        // //Log.i(TAG, "getImageHeightAndWidth  screenHeight "+screenHeight);
+        // //Log.i(TAG, "getImageHeightAndWidth  screenWidth  "+screenWidth);
+        int imagehiegth;
+        int imagewidth;
+        if ((screenHeight <= 500 && screenHeight >= 480)
+                && (screenWidth <= 340 && screenWidth >= 300)) {
+            // //Log.i(TAG, "getImageHeightAndWidth mdpi");
+            imagehiegth = 100;
+            imagewidth = 100;
+            imageHeightAndWidth[0] = imagehiegth;
+            imageHeightAndWidth[1] = imagewidth;
+
+        }
+
+        else if ((screenHeight <= 400 && screenHeight >= 300)
+                && (screenWidth <= 240 && screenWidth >= 220))
+
+        {
+
+            // //Log.i(TAG, "getImageHeightAndWidth ldpi");
+            imagehiegth = 120;
+            imagewidth = 120;
+            imageHeightAndWidth[0] = imagehiegth;
+            imageHeightAndWidth[1] = imagewidth;
+        }
+
+        else if ((screenHeight <= 840 && screenHeight >= 780)
+                && (screenWidth <= 500 && screenWidth >= 440)) {
+
+            // //Log.i(TAG, "getImageHeightAndWidth hdpi");
+            imagehiegth = 150;
+            imagewidth = 150;
+            imageHeightAndWidth[0] = imagehiegth;
+            imageHeightAndWidth[1] = imagewidth;
+        } else if ((screenHeight <= 1280 && screenHeight >= 840)
+                && (screenWidth <= 720 && screenWidth >= 500)) {
+
+            // //Log.i(TAG, "getImageHeightAndWidth xdpi");
+            imagehiegth = 200;
+            imagewidth = 200;
+            imageHeightAndWidth[0] = imagehiegth;
+            imageHeightAndWidth[1] = imagewidth;
+        } else {
+            imagehiegth = 200;
+            imagewidth = 200;
+            imageHeightAndWidth[0] = imagehiegth;
+            imageHeightAndWidth[1] = imagewidth;
+        }
+
+        return imageHeightAndWidth;
+    }
+
+    @SuppressLint("NewApi")
+    public static int getWidth(Context mContext) {
+        int width = 0;
+        WindowManager wm = (WindowManager) mContext
+                .getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        if (Build.VERSION.SDK_INT > 12) {
+            Point size = new Point();
+            display.getSize(size);
+            width = size.x;
+        } else {
+            width = display.getWidth(); // deprecated
+        }
+        return width;
+    }
+
+    @SuppressLint("NewApi")
+    public static int getHeight(Context mContext) {
+        int height = 0;
+        WindowManager wm = (WindowManager) mContext
+                .getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        if (Build.VERSION.SDK_INT > 12) {
+            Point size = new Point();
+            display.getSize(size);
+            height = size.y;
+        } else {
+            height = display.getHeight(); // deprecated
+        }
+        return height;
+    }
 }

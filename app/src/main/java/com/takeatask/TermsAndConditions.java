@@ -42,6 +42,9 @@ public class TermsAndConditions extends Activity implements OnClickListener{
 		back = (ImageView) findViewById(R.id.back);
 		back_ll = (LinearLayout) findViewById(R.id.back_ll);
 		terms_text = (TextView) findViewById(R.id.terms_text);
+
+		back.setOnClickListener(this);
+		back_ll.setOnClickListener(this);
 		
 		if (isConnected) {
 
@@ -137,6 +140,7 @@ public class TermsAndConditions extends Activity implements OnClickListener{
 
 			catch (Exception ae) {
 				showDialog(Constants.ERROR_MSG);
+                ae.printStackTrace();
 			}
 
 		}

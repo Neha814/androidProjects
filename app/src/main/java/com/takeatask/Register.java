@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,6 +24,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.message.BasicNameValuePair;
 
@@ -94,6 +96,8 @@ public class Register extends Activity implements OnClickListener {
 		content1.setSpan(new UnderlineSpan(), 0, content1.length(), 0);
 		terms.setText(content1);
 
+
+
 		/*String[] list = new String[] { "I want to post a task", "Post task",
 				"Run task" };
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(
@@ -106,13 +110,13 @@ public class Register extends Activity implements OnClickListener {
 
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
+												 boolean isChecked) {
 						if (isChecked) {
-							isCheckboxChecked = true ;
+							isCheckboxChecked = true;
 							agree_checkbox
 									.setButtonDrawable(R.drawable.checkbox);
 						} else {
-							isCheckboxChecked = false ;
+							isCheckboxChecked = false;
 							agree_checkbox
 									.setButtonDrawable(R.drawable.uncheck);
 						}
@@ -130,29 +134,14 @@ public class Register extends Activity implements OnClickListener {
 				showDialog("Please accept terms and condition to proceed further.");
 			}
 		} else if(v==terms){
-			Intent i = new Intent(Register.this , TermsAndConditions.class);
-			startActivity(i);
+			Uri uri = Uri.parse(Constants.TERMS_AND_CONDITIONS); // missing 'http://' will cause crashed
+			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+			startActivity(intent);
 		}
 	}
 
 	private void VAlidateAndCallRegisterAPI() {
-	//	String help_text = help_spinner.getSelectedItem().toString();
 
-		/*String is_post_task = "0";
-		String is_run_task = "0";
-
-		if (help_text.equalsIgnoreCase("Post task")) {
-
-			is_post_task = "1";
-			is_run_task = "0";
-
-		} else if (help_text.equalsIgnoreCase("Run task")) {
-			is_post_task = "0";
-			is_run_task = "1";
-		} else {
-			is_post_task = "0";
-			is_run_task = "0";
-		}*/
 
 		String firstname_text = firstname.getText().toString();
 		String lastname_text = lastname.getText().toString();
@@ -186,8 +175,12 @@ public class Register extends Activity implements OnClickListener {
 
 			password.setError("Please enter password");
 
-		} 
-		
+		} else if (password_text.trim().length() < 6) {
+
+			password.setError("Please enter password having minimum length of 6.");
+
+		}
+
 		else if(isAlphaNumeric(password_text)){
 			password.setError("Password must contain atleast one special character and number.");
 		}
@@ -209,9 +202,7 @@ public class Register extends Activity implements OnClickListener {
 			location.setError("Please enter location.");
 		} */
 		
-		else if (country_text.trim().length() < 1) {
-			country.setError("Please enter country.");
-		} else if (city_text.trim().length() < 1) {
+		 else if (city_text.trim().length() < 1) {
 			city.setError("Please enter city.");
 		} else if (state_text.trim().length() < 1) {
 			state.setError("Please enter state.");
@@ -220,7 +211,10 @@ public class Register extends Activity implements OnClickListener {
 		else if (zipcode_text.trim().length() < 1) {
 
 			zipcode.setError("Please enter zipcode.");
-		} else {
+		}
+		else if (country_text.trim().length() < 1) {
+			country.setError("Please enter country.");
+		}else {
 			if (isConnected) {
 
 				new RegisterTask(firstname_text, lastname_text, email_text,
@@ -233,9 +227,9 @@ public class Register extends Activity implements OnClickListener {
 
 	}
 
-	public boolean isAlphaNumeric(String s){
+	public boolean isAlphaNumeric(String s) {
 		    String pattern= "^[a-zA-Z0-9]*$";
-	        if(s.matches(pattern)){
+	        if(s.matches(pattern)) {
 	            return true;
 	        }
 	        return false;   
@@ -266,16 +260,11 @@ public class Register extends Activity implements OnClickListener {
 			this.lastname = lastname_text;
 			this.email = email_text;
 			this.password = password_text;
-//			this.location = location_text;
 			this.country = country_text;
 			this.city = city_text;
 			this.state = state_text;
 			this.zipcode = zipcode_text;
-		/*	this.ispost = is_post_task;
-			this.isrun = is_run_task;*/
 
-			/*this.token_id = Secure.getString(getApplicationContext()
-					.getContentResolver(), Secure.ANDROID_ID);*/
 			
 			this.token_id = Constants.REGISTRATIO_ID;
 			gps = new GPSTracker(Register.this);
@@ -319,12 +308,15 @@ public class Register extends Activity implements OnClickListener {
 						.valueOf(this.lat)));
 
 				localArrayList
-						.add(new BasicNameValuePair("s_post_task", ""));
+						.add(new BasicNameValuePair("is_post_task", ""));
 				localArrayList
 						.add(new BasicNameValuePair("is_run_task", ""));
 
 				localArrayList
 						.add(new BasicNameValuePair("signup_via", "email"));
+
+				localArrayList
+						.add(new BasicNameValuePair("fb_pic", ""));
 
 				localArrayList.add(new BasicNameValuePair("device_id", "0"));
 				localArrayList.add(new BasicNameValuePair("token_id",
@@ -348,6 +340,7 @@ public class Register extends Activity implements OnClickListener {
 
 					Constants.EMAIL = (String) result.get("email");
 					Constants.USER_ID = (String) result.get("user_id");
+                    Constants.LOGIN_TYPE = (String) result.get("signup_via");
 					
 					Constants.TYPE = "mannual";
 
@@ -355,7 +348,10 @@ public class Register extends Activity implements OnClickListener {
 					e.putString("email", Constants.EMAIL);
 					e.putString("user_id", Constants.USER_ID);
 					e.putString("type", Constants.TYPE);
+					e.putString("login_type",Constants.LOGIN_TYPE);
 					e.commit();
+
+                    Toast.makeText(getApplicationContext(),"Successfully Registered.",Toast.LENGTH_SHORT).show();
 
 					Intent i = new Intent(Register.this, Home.class);
 					startActivity(i);

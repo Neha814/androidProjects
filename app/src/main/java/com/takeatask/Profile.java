@@ -180,7 +180,7 @@ public class Profile extends Activity implements OnClickListener {
         imgFileGallery = new File("");
 
         save.setOnClickListener(this);
-        profile_pic.setOnClickListener(this);
+
         back.setOnClickListener(this);
         back_ll.setOnClickListener(this);
 
@@ -191,6 +191,16 @@ public class Profile extends Activity implements OnClickListener {
 	/*	profile_pic.setScaleType(ScaleType.FIT_CENTER);*/
 
         getProfileCall();
+
+        if(Constants.LOGIN_TYPE.equalsIgnoreCase("fb")){
+            profile_pic.setOnClickListener(null);
+            firstname.setEnabled(false);
+            lastname.setEnabled(false);
+        } else {
+            profile_pic.setOnClickListener(this);
+            firstname.setEnabled(true);
+            lastname.setEnabled(true);
+        }
     }
 
     private void getProfileCall() {
@@ -208,8 +218,10 @@ public class Profile extends Activity implements OnClickListener {
         } else if (v == profile_pic) {
             getImage();
         } else if (v == back || v == back_ll) {
-            Intent i = new Intent(Profile.this, Settings.class);
-            startActivity(i);
+           /* Intent i = new Intent(Profile.this, Settings.class);
+            startActivity(i);*/
+
+            finish();
         }
     }
 
@@ -356,7 +368,7 @@ public class Profile extends Activity implements OnClickListener {
                 HttpClient httpclient = new DefaultHttpClient();
 
                 HttpClientUpload client = new HttpClientUpload(
-                        "http://phphosting.osvin.net/TakeATask/WEB_API/updateProfile.php?");
+                        "https://takeataskservices.com/WEB_API/updateProfile.php?");
                 client.connectForMultipart();
 
 				/*
@@ -700,6 +712,11 @@ public class Profile extends Activity implements OnClickListener {
                 e.printStackTrace();
                 return null;
             }
+
+        catch(Exception e){
+            e.printStackTrace();
+            return  null;
+        }
 
     }
 

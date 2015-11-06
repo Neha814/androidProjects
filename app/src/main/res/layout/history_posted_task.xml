@@ -55,18 +55,24 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/light_grey"
+                android:background="@color/white"
                 android:text="Current Task"
-                android:textColor="@color/grey_text_color" />
+                android:textColor="@color/orange" />
+
+            <View
+                android:layout_width="2dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_height="match_parent"/>
 
             <Button
                 android:id="@+id/task_history"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/grey"
+                android:background="@color/white"
                 android:text="Task History"
-                android:textColor="@color/white"
+                android:textColor="@color/dark_orange"
                 android:textStyle="bold" />
         </LinearLayout>
 

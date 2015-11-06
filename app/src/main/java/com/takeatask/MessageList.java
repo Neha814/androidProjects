@@ -31,7 +31,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.circularImageview.ScalingUtilities;
 import com.imageloader.ImageLoader;
 
 import org.apache.http.message.BasicNameValuePair;
@@ -219,15 +218,25 @@ public class MessageList extends Activity implements OnClickListener {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-			
-				Constants.RECEIVER_ID = message_list.get(position).get("user_id");
-				Constants.CHAT_NAME = message_list.get(position).get("fname")
-				+" "+ message_list.get(position).get("lname");
-				Constants.CHAT_IMAGE = message_list.get(position).get("profile_pic");
-				Constants.SENDER_ID = Constants.USER_ID;
-				
-				Intent i = new Intent(MessageList.this , ChatScreen.class);
-				startActivity(i);
+
+				if(position==0){
+                    Constants.CHAT_NAME = message_list.get(position).get("fname")
+                            + " " + message_list.get(position).get("lname");
+                    Constants.CHAT_IMAGE = message_list.get(position).get("profile_pic");
+					Intent i = new Intent(MessageList.this, TakeATask_Notification.class);
+					startActivity(i);
+
+				} else {
+
+					Constants.RECEIVER_ID = message_list.get(position).get("user_id");
+					Constants.CHAT_NAME = message_list.get(position).get("fname")
+							+ " " + message_list.get(position).get("lname");
+					Constants.CHAT_IMAGE = message_list.get(position).get("profile_pic");
+					Constants.SENDER_ID = Constants.USER_ID;
+
+					Intent i = new Intent(MessageList.this, ChatScreen.class);
+					startActivity(i);
+				}
 			}
 		});
 		
@@ -600,9 +609,9 @@ public class MessageList extends Activity implements OnClickListener {
 			
 			final String url = message_list.get(position).get("profile_pic");
 			holder.user_name.setText(message_list.get(position).get("fname")+" "+message_list.get(position).get("lname"));
-			//imageLoader.DisplayImage(url, R.drawable.default_pic, holder.user_image);
+			imageLoader.DisplayImage(url, R.drawable.default_pic, holder.user_image);
 
-			Thread t = new Thread(){
+			/*Thread t = new Thread(){
 				public void run(){
 					final Bitmap bitmapToGetFromURL = getBitmapFromURL(url);
 
@@ -610,7 +619,7 @@ public class MessageList extends Activity implements OnClickListener {
 
 						@Override
 						public void run() {
-							/*croppedBitmap(bitmapToGetFromURL);*/
+							*//*croppedBitmap(bitmapToGetFromURL);*//*
 
 
 
@@ -641,7 +650,7 @@ public class MessageList extends Activity implements OnClickListener {
 					});
 
 				}
-			};t.start();
+			};t.start();*/
 		
 			String messageCount = message_list.get(position).get("messageCount");
 			int msgCOUNT = Integer.parseInt(messageCount);

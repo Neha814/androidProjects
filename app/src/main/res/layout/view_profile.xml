@@ -44,6 +44,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:text="Add Rating"
+            android:visibility="gone"
             android:textColor="@color/yellow"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -59,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5.5"
-            android:background="@color/white" >
+        >
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -70,6 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="1"
+                    android:visibility="gone"
                     android:scaleType="fitXY" />
 
                 <LinearLayout
@@ -86,9 +88,10 @@
                         android:background="@drawable/profile_bg_image"
                         android:padding="7dp" >
 
-                        <com.example.circularImageview.RoundedImageView
+                        <com.circularImageview.RoundedImageView
                             android:id="@+id/profile_pic"
                             android:layout_width="110dp"
+                            android:src="@drawable/noimg"
                             android:layout_height="110dp"
                             android:padding="13dp" />
                     </LinearLayout>
@@ -195,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/background"
                     android:drawablePadding="8dp"
-                    android:drawableRight="@drawable/forward_arrow"
+
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Something about me"

@@ -118,7 +118,7 @@ public class PostTask4 extends FragmentActivity implements OnClickListener {
 			//finish();
 			/*Intent i = new Intent(PostTask4.this , Home.class);
 			startActivity(i);*/
-			
+
 			SaveAndGo();
 			Intent i = new Intent(PostTask4.this , PostTask3.class);
 			startActivity(i);
@@ -148,26 +148,61 @@ public class PostTask4 extends FragmentActivity implements OnClickListener {
 			showDialog(0);
 
 		}else if(v==post1 || v==l1){
-			SaveAndGo();
-			Intent i = new Intent(PostTask4.this , PostTask1.class);
-			startActivity(i);
+
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask4.this, PostTask1.class);
+				startActivity(i);
+			}
 		}else if(v==post2 || v==l2){
-			SaveAndGo();
-			Intent i = new Intent(PostTask4.this , PostTask2.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask4.this, PostTask2.class);
+				startActivity(i);
+			}
 		}else if(v==post3 || v==l3){
-			SaveAndGo();
-			Intent i = new Intent(PostTask4.this , PostTask3.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask4.this, PostTask3.class);
+				startActivity(i);
+			}
 		}else if(v==post5 || v==l5){
-			SaveAndGo();
-			Intent i = new Intent(PostTask4.this , PostTask5.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask4.this, PostTask5.class);
+				startActivity(i);
+			}
 		}else if(v==post6 || v==l6){
-			SaveAndGo();
-			Intent i = new Intent(PostTask4.this , PostTask6.class);
-			startActivity(i);
+			boolean isValid = ValidateFields();
+
+			if(isValid) {
+				SaveAndGo();
+				Intent i = new Intent(PostTask4.this, PostTask6.class);
+				startActivity(i);
+			}
 		}
+	}
+
+	private boolean ValidateFields() {
+
+		String date_Text = date.getText().toString();
+		String comment_text = comment.getText().toString();
+
+		if (date_Text.trim().length() < 1 || date_Text.equals("Date")) {
+			date.setError("Please select date");
+			return false;
+		}
+
+
+		return  true;
 	}
 
 /*	public class DatePickerFragment extends DialogFragment implements

@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical"
+    android:weightSum="10" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.7" >
+
+        <LinearLayout
+            android:id="@+id/back_ll"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_arrow"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Task Details"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size" />
+
+
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8.3" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+             >
+
+            <!--
+                 <ImageView
+                android:id="@+id/task_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="8dp"
+                android:src="@drawable/ic_launcher" />
+            -->
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"
+                android:text="Neha Bhardwaj"
+                android:textColor="@drawable/textview_selector_yellow_default"
+                android:textSize="22dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_orange"
+                android:orientation="horizontal"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:weightSum="10">
+
+                <EditText
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7.5"
+                    android:background="@null"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:text="dcvc"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:gravity="right"
+                    android:background="@null"
+
+                    android:ems="6"
+                    android:enabled="false"
+                    android:text="2580"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:layout_marginRight="20dp"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" >
+
+                <LinearLayout
+                    android:id="@+id/tasker_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tasker_static"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Task Runner Name: "
+                        android:textColor="@color/white"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tasker_poster_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="Neha Bhardwaj"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cat_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tasker_layout"
+                    android:layout_marginTop="8dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/c_static"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category : "
+                        android:textColor="@color/white"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/cat_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="Message"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+                </LinearLayout>
+
+
+
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cat_layout"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:padding="4dp"
+
+                    android:text="vxdf fgfgf dgfdgf dvcv cvvcv cvcxvcv cvdwew fggv eefcefdf"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/description"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/dark_orange" />
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view1"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/pole"
+                    android:drawablePadding="6dp"
+                    android:text="Address"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text4"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+                    android:enabled="false"
+                    android:padding="4dp"
+                    android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/yellow"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:id="@+id/city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/address"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+                    android:enabled="false"
+                    android:padding="4dp"
+                    android:singleLine="true"
+                    android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/yellow"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:id="@+id/state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/city"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+                    android:enabled="false"
+                    android:padding="4dp"
+                    android:singleLine="true"
+                    android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/yellow"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:id="@+id/country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/state"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+                    android:enabled="false"
+                    android:padding="4dp"
+                    android:singleLine="true"
+                    android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/yellow"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:id="@+id/zipcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/country"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+                    android:enabled="false"
+                    android:padding="4dp"
+                    android:singleLine="true"
+                    android:text="abcd, Street no 10,USA , Miami,Florida - 160019 "
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/yellow"
+                    android:textSize="15dp" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/zipcode"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/dark_orange" />
+
+                <TextView
+                    android:id="@+id/text6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/view2"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Task to be completed by"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text6"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/expiry"
+                    android:drawablePadding="4dp"
+                    android:text="11th august 2015"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/text7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/date"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Comments"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text7"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:text="Comments"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/text8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/comments"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="vxdf fgfgf dgfdgf dvcv cvvcv cvcxvcv cvdwew fggv eefcefdf"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/text8"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/dark_orange" />
+
+                <!-- ************* attachment *************** -->
+
+                <TextView
+                    android:id="@+id/attchment_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view3"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/attach_icon"
+                    android:drawablePadding="6dp"
+                    android:text="Attachment"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/file_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/attchment_static"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+
+                    android:padding="4dp"
+                    android:text="Attachment"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <!-- ***************************************** -->
+                <TextView
+                    android:id="@+id/file_name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+
+                    android:padding="4dp"
+                    android:text="Attachment"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/file_name3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name2"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+
+                    android:padding="4dp"
+                    android:text="Attachment"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/file_name4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name3"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+
+                    android:padding="4dp"
+                    android:text="Attachment"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/file_name5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name4"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+
+
+                    android:padding="4dp"
+                    android:text="Attachment"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <!-- ******** category name ****************** -->
+
+
+                <!-- **************************************** -->
+
+                <LinearLayout
+                    android:id="@+id/price_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/file_name"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="11dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10" >
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3" >
+
+                        <TextView
+                            android:id="@+id/text_static"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Price: "
+                            android:textColor="@color/white"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

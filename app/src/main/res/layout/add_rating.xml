@@ -46,6 +46,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:visibility="gone"
             android:background="@color/yellow" >
 
             <ImageView
@@ -74,6 +75,7 @@
             <RatingBar
                 android:id="@+id/ratingBar1"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp" />
@@ -87,7 +89,7 @@
                 android:layout_marginTop="8dp"
                 android:drawableLeft="@drawable/small_rate"
                 android:drawablePadding="8dp"
-                android:text="Add review"
+                android:text="Add Comment"
                 android:textColor="@color/yellow"
                 android:textStyle="bold" />
 
@@ -99,6 +101,8 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="8dp"
+                android:gravity="top|left"
+                android:inputType="textMultiLine"
                 android:background="@drawable/white_rounded_box"
                 android:ems="12"
                 android:padding="6dp" />
@@ -109,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/button"
                 android:text="Rate"
                 android:textAllCaps="false"

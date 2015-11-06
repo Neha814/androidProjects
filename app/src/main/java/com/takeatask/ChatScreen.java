@@ -796,8 +796,8 @@ public class ChatScreen extends Activity {
 		
 		new ReceiveChat().cancel(isConnected);
 		
-		Intent i = new Intent(ChatScreen.this , MessageList.class);
-		startActivity(i);
+		/*Intent i = new Intent(ChatScreen.this , MessageList.class);
+		startActivity(i);*/
 		finish();
 	}
 

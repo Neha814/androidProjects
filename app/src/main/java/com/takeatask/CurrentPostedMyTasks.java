@@ -2,23 +2,18 @@ package com.takeatask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -32,7 +27,9 @@ import android.widget.Toast;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import functions.Constants;
 import functions.Functions;
@@ -311,56 +308,64 @@ public class CurrentPostedMyTasks extends Activity {
 				holder.description = (TextView) convertView
 						.findViewById(R.id.description);
 				holder.price = (TextView) convertView.findViewById(R.id.price);
-				holder.view_profile = (TextView) convertView
-						.findViewById(R.id.view_profile);
+				/*holder.view_profile = (TextView) convertView
+						.findViewById(R.id.view_profile);*/
 				holder.close = (Button) convertView.findViewById(R.id.close);
 				holder.view_task_detail = (TextView) convertView.findViewById(R.id.view_task_detail);
 				holder.ll = (LinearLayout) convertView.findViewById(R.id.ll);
+				holder.progress = (TextView) convertView.findViewById(R.id.progress);
+				holder.chat = (TextView) convertView.findViewById(R.id.chat);
 
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-			
+
+
+			if(currentPostedList.get(position).get("accepted").equalsIgnoreCase("0")){
+				holder.progress.setVisibility(View.GONE);
+                holder.chat.setVisibility(View.GONE);
+			} else if(currentPostedList.get(position).get("accepted").equalsIgnoreCase("1")){
+				holder.progress.setVisibility(View.VISIBLE);
+				holder.progress.setText("In progress...");
+                holder.chat.setVisibility(View.VISIBLE);
+			}
 			SpannableString content1 = new SpannableString("View Task Details");
 			content1.setSpan(new UnderlineSpan(), 0, content1.length(), 0);
 			holder.view_task_detail.setText(content1);
 
-			holder.view_profile.setTag(position);
+
 			holder.close.setTag(position);
 			holder.view_task_detail.setTag(position);
 			holder.ll.setTag(position);
-			
+            holder.chat.setTag(position);
+
+            /*SpannableString content2 = new SpannableString("Message");
+            content2.setSpan(new UnderlineSpan(), 0, content2.length(), 0);
+            holder.chat.setText(content2);*/
+
+            holder.chat.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = (Integer) view.getTag();
+
+                    Constants.RECEIVER_ID = currentPostedList.get(pos).get("accepted_by");
+                    Constants.CHAT_NAME = currentPostedList.get(pos).get("accepted_fname") + " "
+                            + currentPostedList.get(pos).get("accepted_lname");
+                    Constants.CHAT_IMAGE = currentPostedList.get(pos).get("accepted_pic");
+                    Constants.SENDER_ID = Constants.USER_ID;
+
+                    Intent i = new Intent(CurrentPostedMyTasks.this, ChatScreen.class);
+                    startActivity(i);
+                }
+            });
 			holder.ll.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					int pos = (Integer) v.getTag();
-					
-					Constants.TASK_DETAIL_ADDRESS = currentPostedList.get(pos).get("address");
-					
-					Constants.TASK_DETAIL_CITY =currentPostedList.get(pos).get("city") ;
-					Constants.TASK_DETAIL_STATE = currentPostedList.get(pos).get("state");
-					Constants.TASK_DETAIL_COUNTRY =currentPostedList.get(pos).get("country") ;
-					Constants.TASK_DETAIL_ZIPCODE = currentPostedList.get(pos).get("zipcode");
-					
-					
-					Constants.TASK_DETAIL_DATE = currentPostedList.get(pos).get("due_date");
-					
-					Constants.TASK_DETAIL_DESC = currentPostedList.get(pos).get("description");
-					Constants.TASK_DETAIL_PRICE = currentPostedList.get(pos).get("price");
-					Constants.TASK_DETAIL_TITLE = currentPostedList.get(pos).get("title");
-					Constants.TASK_DETAIL_URL = currentPostedList.get(pos).get("file");
-					Constants.TASK_DETAIL_USERID = currentPostedList.get(pos).get("user_id");
-					Constants.TASK_DETAIL_ID = currentPostedList.get(pos).get("task_id");
-					Constants.TASK_DETAIL_FNAME = currentPostedList.get(pos).get("fname");
-					Constants.TASK_DETAIL_LNAME = currentPostedList.get(pos).get("lname");
-					Constants.TASK_DETAIL_CATNAME = currentPostedList.get(pos).get("category_name");
-					Constants.TASK_DETAIL_SUBCATNAME = currentPostedList.get(pos).get("subcategory_name");
-					Constants.TASK_DETAIL_ACCEPTED = currentPostedList.get(pos).get("accepted");
-					
-					Intent i = new Intent(CurrentPostedMyTasks.this , MyTaskDetail.class);
-					startActivity(i);
+
+                    goToDetailPage(pos);
 				}
 			});
 			
@@ -369,31 +374,8 @@ public class CurrentPostedMyTasks extends Activity {
 				@Override
 				public void onClick(View v) {
 					int pos = (Integer) v.getTag();
-					
-					Constants.TASK_DETAIL_ADDRESS = currentPostedList.get(pos).get("address");
-					
-					Constants.TASK_DETAIL_CITY =currentPostedList.get(pos).get("city") ;
-					Constants.TASK_DETAIL_STATE = currentPostedList.get(pos).get("state");
-					Constants.TASK_DETAIL_COUNTRY =currentPostedList.get(pos).get("country") ;
-					Constants.TASK_DETAIL_ZIPCODE = currentPostedList.get(pos).get("zipcode");
-					
-					
-					Constants.TASK_DETAIL_DATE = currentPostedList.get(pos).get("due_date");
-					
-					Constants.TASK_DETAIL_DESC = currentPostedList.get(pos).get("description");
-					Constants.TASK_DETAIL_PRICE = currentPostedList.get(pos).get("price");
-					Constants.TASK_DETAIL_TITLE = currentPostedList.get(pos).get("title");
-					Constants.TASK_DETAIL_URL = currentPostedList.get(pos).get("file");
-					Constants.TASK_DETAIL_USERID = currentPostedList.get(pos).get("user_id");
-					Constants.TASK_DETAIL_ID = currentPostedList.get(pos).get("task_id");
-					Constants.TASK_DETAIL_FNAME = currentPostedList.get(pos).get("fname");
-					Constants.TASK_DETAIL_LNAME = currentPostedList.get(pos).get("lname");
-					Constants.TASK_DETAIL_CATNAME = currentPostedList.get(pos).get("category_name");
-					Constants.TASK_DETAIL_SUBCATNAME = currentPostedList.get(pos).get("subcategory_name");
-					Constants.TASK_DETAIL_ACCEPTED = currentPostedList.get(pos).get("accepted");
-					
-					Intent i = new Intent(CurrentPostedMyTasks.this , MyTaskDetail.class);
-					startActivity(i);
+
+                    goToDetailPage(pos);
 					
 				}
 			});
@@ -405,13 +387,15 @@ public class CurrentPostedMyTasks extends Activity {
 					int pos = (Integer) v.getTag();
 					
 					String task_id = currentPostedList.get(pos).get("task_id");
-					String to_id = currentPostedList.get(pos).get("user_id");
+					String to_id = currentPostedList.get(pos).get("accepted_by");
+
+					Constants.REVIEW_TASK_ID = task_id;
 					
 					showConfirmationDialog("Are you sure you want to close this Task ?" , task_id , to_id);
 				}
 			});
 
-			holder.view_profile.setOnClickListener(new OnClickListener() {
+			/*holder.view_profile.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -423,7 +407,7 @@ public class CurrentPostedMyTasks extends Activity {
 						startActivity(i);
 					
 				}
-			});
+			});*/
 
 			holder.title.setText(currentPostedList.get(position).get("title"));
 			holder.description.setText(currentPostedList.get(position).get(
@@ -434,7 +418,52 @@ public class CurrentPostedMyTasks extends Activity {
 			return convertView;
 		}
 
-		protected void showConfirmationDialog(String message , final String task_id , final String to_id) {
+        private void goToDetailPage(int pos) {
+            Constants.TASK_DETAIL_ADDRESS = currentPostedList.get(pos).get("address");
+
+            Constants.TASK_DETAIL_CITY =currentPostedList.get(pos).get("city") ;
+            Constants.TASK_DETAIL_STATE = currentPostedList.get(pos).get("state");
+            Constants.TASK_DETAIL_COUNTRY =currentPostedList.get(pos).get("country") ;
+            Constants.TASK_DETAIL_ZIPCODE = currentPostedList.get(pos).get("zipcode");
+
+
+            Constants.TASK_DETAIL_DATE = currentPostedList.get(pos).get("due_date");
+
+            Constants.TASK_DETAIL_DESC = currentPostedList.get(pos).get("description");
+            Constants.TASK_DETAIL_PRICE = currentPostedList.get(pos).get("price");
+            Constants.TASK_DETAIL_TITLE = currentPostedList.get(pos).get("title");
+          //  Constants.TASK_DETAIL_URL = currentPostedList.get(pos).get("file");
+            Constants.TASK_DETAIL_USERID = currentPostedList.get(pos).get("user_id");
+            Constants.TASK_DETAIL_ID = currentPostedList.get(pos).get("task_id");
+            Constants.TASK_DETAIL_FNAME = currentPostedList.get(pos).get("fname");
+            Constants.TASK_DETAIL_LNAME = currentPostedList.get(pos).get("lname");
+            Constants.TASK_DETAIL_CATNAME = currentPostedList.get(pos).get("category_name");
+            Constants.TASK_DETAIL_SUBCATNAME = currentPostedList.get(pos).get("subcategory_name");
+            Constants.TASK_DETAIL_ACCEPTED = currentPostedList.get(pos).get("accepted");
+            Constants.TASK_DETAIL_TASKER_POSTER_NAME = currentPostedList.get(pos).get("accepted_fname")+" "
+                    +currentPostedList.get(pos).get("accepted_lname");
+            Constants.TASK_DETAIL_TASKER_POSTER_ID = currentPostedList.get(pos).get("accepted_by");
+            String attachmentListString  = currentPostedList.get(pos).get("attachments");
+			Constants.TASK_DETAIL_COMMENTS = currentPostedList.get(pos).get("comments");
+
+            String str = attachmentListString;
+            List<String> attachmentList = Arrays.asList(str.split(","));
+
+
+
+            Constants.TASK_DETAIL_ATTACHMENT_1 = attachmentList.get(0);
+            Constants.TASK_DETAIL_ATTACHMENT_2 = attachmentList.get(1);
+            Constants.TASK_DETAIL_ATTACHMENT_3 = attachmentList.get(2);
+            Constants.TASK_DETAIL_ATTACHMENT_4 = attachmentList.get(3);
+            Constants.TASK_DETAIL_ATTACHMENT_5 = attachmentList.get(4);
+
+			Log.e("**** attch 1 ****", "" + Constants.TASK_DETAIL_ATTACHMENT_1);
+            Intent i = new Intent(CurrentPostedMyTasks.this , MyTaskDetail.class);
+            startActivity(i);
+
+        }
+
+  /*      protected void showConfirmationDialog(String message , final String task_id , final String to_id) {
 		final Dialog dialog;
 		dialog = new Dialog(CurrentPostedMyTasks.this);
 		dialog.setCancelable(false);
@@ -476,7 +505,42 @@ public class CurrentPostedMyTasks extends Activity {
 
 		dialog.show();
 
-	}
+	}*/
+
+		protected void showConfirmationDialog(final String message , final String task_id , final String to_id) {
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(CurrentPostedMyTasks.this);
+
+			// Setting Dialog Title
+			alertDialog.setTitle("Exit...");
+
+			// Setting Dialog Message
+			alertDialog.setMessage(message);
+
+			// Setting Icon to Dialog
+			//alertDialog.setIcon(R.drawable.alarm);
+
+			// Setting Positive "Yes" Button
+			alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+
+					dialog.cancel();
+					CloseTask(task_id , to_id);
+
+				}
+			});
+
+			// Setting Negative "NO" Button
+			alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Write your code here to invoke NO event
+
+					dialog.cancel();
+				}
+			});
+
+			// Showing Alert Message
+			alertDialog.show();
+		}
 		
 		protected void CloseTask(String task_id , String to_id) {
 			if (isConnected) {
@@ -488,13 +552,14 @@ public class CurrentPostedMyTasks extends Activity {
 		}
 
 		class ViewHolder {
+
 			TextView title, description, price;
 			
 			Button close;
 			
 			TextView view_task_detail;
 			
-			TextView view_profile;
+			TextView  progress ,chat;
 			
 			LinearLayout ll;
 
@@ -562,8 +627,9 @@ public class CurrentPostedMyTasks extends Activity {
 					if (result.get("ResponseCode").equals("true")) {
 
 					Toast.makeText(getApplicationContext(), "Task closed successfully.", Toast.LENGTH_SHORT).show();
-					Intent i = new Intent(CurrentPostedMyTasks.this, CurrentPerformingTasks.class);
-					startActivity(i);
+						Constants.TASK_DETAIL_USERID= this.toID;
+						Intent i = new Intent(CurrentPostedMyTasks.this, AddRating.class);
+						startActivity(i);
 					} else if (result.get("ResponseCode").equals("false")) {
 						
 						String msg = "Something went wrong.Please try again.";

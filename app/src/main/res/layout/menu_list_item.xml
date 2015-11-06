@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="12dp"
-        android:layout_toRightOf="@+id/extra"
+        android:layout_marginLeft="8dp"
+
         android:src="@drawable/ic_launcher" />
     
     <TextView
@@ -20,7 +20,9 @@
         android:layout_toLeftOf="@+id/arrow"
         android:text="100"
         android:textStyle="bold"
-          android:textColor="#40FF00"
+        android:background="@drawable/circle"
+          android:textColor="@color/orange"
+       android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_marginRight="12dp"
   />
@@ -44,8 +46,8 @@
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/image"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp" >
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp" >
 
         <TextView
             android:id="@+id/text2"

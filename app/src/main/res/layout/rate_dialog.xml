@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="210dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:background="@color/org_line"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_alignParentTop="true"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Give rating to pulkit"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:id="@+id/msg"/>
+
+        <RatingBar
+            android:id="@+id/give_rating"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <EditText
+            android:id="@+id/give_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+           android:hint="Comment"
+            android:background="@drawable/white_rounded_box"
+         android:ems="12" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/rate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/yellow"
+        android:text="Rate"
+        android:textColor="@color/orange"
+        android:textStyle="bold" />
+</RelativeLayout>

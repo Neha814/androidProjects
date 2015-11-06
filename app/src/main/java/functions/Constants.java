@@ -6,8 +6,12 @@ import android.graphics.Bitmap;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Constants {
+
+    public static String TERMS_AND_CONDITIONS = "http://takeataskservices.com/terms-conditions.php";
+	public static String PRIVACY_POLICY = "http://takeataskservices.com/privacy-policy.php";
 
 	public static String No_INTERNET = "No internet connection.";
 	public static String ERROR_MSG = "Something went wrong. Please try again after some time.";
@@ -16,8 +20,12 @@ public class Constants {
 	public static ArrayList<Integer> GLOBAL_categoryListID = new ArrayList<Integer>();
 	public static ArrayList<HashMap<String, String>> FollowersList = new ArrayList<HashMap<String,String>>();
 
+    public static List<String> AttachmentList = new ArrayList<String>();
+
 	public static String EMAIL;
 	public static String USER_ID = "";
+
+    public static String LOGIN_TYPE = "";
 
 	public static SharedPreferences mPrefs;
 
@@ -54,8 +62,20 @@ public class Constants {
 
 	public static Bitmap TAKENIMAGE;
 
+	public static Bitmap TAKENIMAGE1;
+	public static Bitmap TAKENIMAGE2;
+	public static Bitmap TAKENIMAGE3;
+	public static Bitmap TAKENIMAGE4;
+	public static Bitmap TAKENIMAGE5;
+
+
+
+public static int ATTACHMENTCOUNT = 0;
+
 	public static double LATITUDE;
 	public static double LONGITUDE;
+
+	public static int image_number=0 ;
 
 	public static String CATEGORY_ID;
 	public static String CATEGORY_NAME;
@@ -74,10 +94,12 @@ public class Constants {
 
 	public static int TOTAL_PAGE_COUNT = 1;
 
+	public static String REVIEW_TASK_ID;
+
 	public static String TASK_DETAIL_TITLE;
 	public static String TASK_DETAIL_DESC;
 	public static String TASK_DETAIL_PRICE;
-	public static String TASK_DETAIL_URL;
+	//public static String TASK_DETAIL_URL;
 	public static String TASK_DETAIL_DATE;
 	public static String TASK_DETAIL_ADDRESS;
 	public static String TASK_DETAIL_CITY ;
@@ -88,9 +110,19 @@ public class Constants {
 	public static String TASK_DETAIL_ID;
 	public static String TASK_DETAIL_FNAME;
 	public static String TASK_DETAIL_LNAME ;
+    public static String TASK_DETAIL_TASKER_POSTER_NAME ;
+    public static String TASK_DETAIL_TASKER_POSTER_ID ;
+
+    public static String TASK_DETAIL_ATTACHMENT_1 ;
+    public static String TASK_DETAIL_ATTACHMENT_2 ;
+    public static String TASK_DETAIL_ATTACHMENT_3 ;
+    public static String TASK_DETAIL_ATTACHMENT_4 ;
+    public static String TASK_DETAIL_ATTACHMENT_5 ;
+
 	
 	public static String TASK_DETAIL_CATNAME ;
 	public static String TASK_DETAIL_SUBCATNAME ;
+	public static String TASK_DETAIL_COMMENTS ;
 	
 	public static String TASK_DETAIL_ACCEPTED ;
 
@@ -161,6 +193,11 @@ public class Constants {
 	
 	public static String GLOBAL_QUES ;
 	public static String GLOBAL_ANS ;
-	
+
+
+	public static String SEARCH_CAT_ID;
+	public static String SEARCH_CAT_NAME;
+
+
 
 }

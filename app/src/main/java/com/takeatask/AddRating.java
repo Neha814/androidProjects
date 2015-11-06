@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,8 @@ public class AddRating extends Activity {
 	LinearLayout back_ll;
 
 	TransparentProgressDialog db;
+
+	boolean isSuccess = false ;
 
 /*	protected void showDialog(String msg) {
 		try {
@@ -96,6 +99,10 @@ public class AddRating extends Activity {
 				public void onClick(DialogInterface dialog, int which) {
 					// Write your code here to execute after dialog closed
 					dialog.cancel();
+                    if(isSuccess){
+                        Intent i = new Intent(AddRating.this , Home.class);
+                        startActivity(i);
+                    }
 				}
 			});
 
@@ -190,6 +197,8 @@ public class AddRating extends Activity {
 						Constants.TASK_DETAIL_USERID));
 				localArrayList.add(new BasicNameValuePair("ratings",
 						this.rateVALUE));
+				localArrayList.add(new BasicNameValuePair("task_id",
+                        Constants.REVIEW_TASK_ID));
 				localArrayList
 						.add(new BasicNameValuePair("review", this.REVIEW));
 
@@ -207,6 +216,8 @@ public class AddRating extends Activity {
 
 			try {
 				if (result.get("ResponseCode").equals("true")) {
+
+                    isSuccess = true;
 
 					showDialog("Rating added successfully.");
 

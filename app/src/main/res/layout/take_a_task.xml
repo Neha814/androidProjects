@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg"
     android:orientation="vertical"
-    android:weightSum="10" >
+    android:weightSum="10">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.5" >
+        android:layout_weight="1.5">
 
         <LinearLayout
             android:id="@+id/back_ll"
@@ -18,7 +18,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:gravity="center" >
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/back"
@@ -38,130 +38,89 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="top|center_horizontal"
-        android:orientation="vertical" >
-
-        <EditText
-            android:id="@+id/search_editText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/search"
-            android:drawablePadding="8dp"
-            android:ems="10"
-            android:hint="Search"
-            android:textColorHint="@color/white" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.3"
         android:orientation="horizontal"
-        android:weightSum="10" >
+        android:weightSum="10">
 
-        <!-- *************** all task ******************************* -->
-
-        <LinearLayout
-            android:id="@+id/ll"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp" >
-
-            <Button
-                android:id="@+id/all_task"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:background="@null"
-                android:drawableTop="@drawable/all_task"
-                android:text="All Task"
-                android:textAllCaps="false"
-                android:visibility="gone" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/all_task" />
-
-            <Spinner
-                android:id="@+id/category_spinner"
-                style="@style/spinner_style_red_new"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center" />
-        </LinearLayout>
-
-        <!-- ************************ search ***************************** -->
 
         <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/search_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:background="@color/white"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="8.5"
+            android:background="@drawable/search_box"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp" >
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:weightSum="10">
 
-            <View
-                android:layout_width="2dp"
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:background="@color/yellow" />
+                android:layout_weight="1"
+                android:src="@drawable/search_button" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/search_editText"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:gravity="center"
-                android:orientation="vertical" >
+                android:layout_gravity="center"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="8"
+                android:background="@null"
+                android:ems="10"
+                android:hint="Search..."
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/search" />
-
-                <Button
-                    android:id="@+id/search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:background="@null"
-                    android:text="Search"
-                    android:textAllCaps="false"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/cross_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/cross_button" />
         </LinearLayout>
 
-        <!-- ************************************************************************************ -->
+        <LinearLayout
+            android:id="@+id/filter_layout"
+            android:layout_width="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/filter_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/filter" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6.2" >
+        android:layout_weight="7.5">
 
         <ListView
             android:id="@+id/listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/white"
-            android:dividerHeight="0.5dp" >
-        </ListView>
+            android:dividerHeight="0.5dp"
+            android:paddingTop="15dp"></ListView>
     </LinearLayout>
 
 </LinearLayout>

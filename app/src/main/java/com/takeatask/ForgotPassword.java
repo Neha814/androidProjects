@@ -184,7 +184,7 @@ public class ForgotPassword extends Activity implements OnClickListener {
 				result = function.forgetPass(localArrayList);
 
 			} catch (Exception localException) {
-
+				localException.printStackTrace();
 			}
 
 			return null;
@@ -203,6 +203,7 @@ public class ForgotPassword extends Activity implements OnClickListener {
 					
 
 				} else if (result.get("ResponseCode").equals("false")) {
+
 					showDialog((String) result.get("MessageWhatHappen"));
 					Toast.makeText(getApplicationContext(), "status false.",
 							Toast.LENGTH_SHORT).show();

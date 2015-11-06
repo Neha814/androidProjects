@@ -51,12 +51,34 @@ public class StringUtils {
 			Log.e("***** myDate *****", "" + myDate);
 			SimpleDateFormat formatter = new SimpleDateFormat("MM / dd / yyyy");
 			 DateConverted = formatter.format(myDate);
-			Log.e("***** conveted date *****", "" + DateConverted);
+			Log.e("*conveted date*", "" + DateConverted);
 
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return DateConverted;
+
+	}
+
+	// Convert date String from one format to another
+
+	public static String formateDateFromstring(String inputFormat, String outputFormat, String inputDate){
+
+		Date parsed = null;
+		String outputDate = "";
+
+		SimpleDateFormat df_input = new SimpleDateFormat(inputFormat, java.util.Locale.getDefault());
+		SimpleDateFormat df_output = new SimpleDateFormat(outputFormat, java.util.Locale.getDefault());
+
+		try {
+			parsed = df_input.parse(inputDate);
+			outputDate = df_output.format(parsed);
+
+		} catch (ParseException e) {
+			Log.e("TAG Date", "ParseException - dateFormat");
+		}
+
+		return outputDate;
 
 	}
 

@@ -1,20 +1,5 @@
 package com.takeatask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -25,10 +10,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -41,8 +26,8 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -52,15 +37,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.imageloader.ImageLoader;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+
 import functions.Constants;
 import functions.Functions;
-import com.takeatask.TaskDetail.DeletePost;
-import com.takeatask.TaskDetail.SendRequestCall;
-import com.takeatask.TaskDetail.updateProfileTask;
 import utils.HttpClientUpload;
 import utils.NetConnection;
+import utils.StringUtils;
 import utils.TransparentProgressDialog;
-import com.imageloader.ImageLoader;
 
 public class MyTaskDetail extends Activity {
 
@@ -69,7 +67,8 @@ public class MyTaskDetail extends Activity {
 
 	LinearLayout back_ll;
 
-	EditText title, price, description;
+	EditText title ,description;
+	 EditText price ;
 	TextView date;
 
 	EditText address;
@@ -88,7 +87,8 @@ public class MyTaskDetail extends Activity {
 
 	TextView Message_static, message, cat_name;
 	
-	TextView file_name;
+	TextView file_name,file_name2;
+    TextView file_name3,file_name4,file_name5 ,comments;
 
 	TransparentProgressDialog db;
 
@@ -117,56 +117,7 @@ public class MyTaskDetail extends Activity {
 	File imgFileGallery;
 	public static ContentResolver appContext;
 
-/*	protected void showDialog(String msg) {
-		try {
-			final Dialog dialog;
-			dialog = new Dialog(MyTaskDetail.this);
-			dialog.setCancelable(false);
-			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			dialog.getWindow().setFormat(PixelFormat.TRANSLUCENT);
-
-			Drawable d = new ColorDrawable(Color.BLACK);
-			d.setAlpha(0);
-			dialog.getWindow().setBackgroundDrawable(d);
-
-			Button ok;
-			TextView message;
-
-			dialog.setContentView(R.layout.dialog);
-
-			ok = (Button) dialog.findViewById(R.id.ok);
-			message = (TextView) dialog.findViewById(R.id.message);
-
-			message.setText(msg);
-
-			ok.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					dialog.dismiss();
-
-					if (isSuccessfullyDeleted) {
-						Intent i = new Intent(MyTaskDetail.this,
-								CurrentPostedMyTasks.class);
-						startActivity(i);
-					} else if (isPostSuccess) {
-						Intent i = new Intent(MyTaskDetail.this,
-								CurrentPostedMyTasks.class);
-						startActivity(i);
-					} else if (isSuccess) {
-
-						finish();
-
-					}
-				}
-			});
-
-			dialog.show();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}*/
+TextView tasker_static, tasker_poster_name;
 	
 	public void showDialog(String msg) {
 		try {
@@ -244,8 +195,15 @@ public class MyTaskDetail extends Activity {
 		Message_static = (TextView) findViewById(R.id.Message_static);
 		bid_price = (EditText) findViewById(R.id.bid_price);
 		file_name = (TextView) findViewById(R.id.file_name);
+		file_name2 = (TextView) findViewById(R.id.file_name2);
+		file_name3 = (TextView) findViewById(R.id.file_name3);
+		file_name4 = (TextView) findViewById(R.id.file_name4);
+		file_name5 = (TextView) findViewById(R.id.file_name5);
 		cat_name = (TextView) findViewById(R.id.cat_name);
 		back_ll = (LinearLayout) findViewById(R.id.back_ll);
+        tasker_static = (TextView) findViewById(R.id.tasker_static);
+        tasker_poster_name = (TextView) findViewById(R.id.tasker_poster_name);
+		comments = (TextView) findViewById(R.id.comments);
 		
 	
 
@@ -266,10 +224,15 @@ public class MyTaskDetail extends Activity {
 		apply = (Button) findViewById(R.id.apply);
 
 		title.setText(Constants.TASK_DETAIL_TITLE);
-		price.setText(Constants.TASK_DETAIL_PRICE);
+		price.setText("$ "+Constants.TASK_DETAIL_PRICE);
 		description.setText(Constants.TASK_DETAIL_DESC);
 		
 		file_name.setClickable(true);
+        file_name2.setClickable(true);
+        file_name3.setClickable(true);
+        file_name4.setClickable(true);
+        file_name5.setClickable(true);
+
 		/*
 		 * address.setText(Constants.TASK_DETAIL_ADDRESS + " ," +
 		 * Constants.TASK_DETAIL_CITY + " ," + Constants.TASK_DETAIL_STATE +
@@ -299,7 +262,40 @@ public class MyTaskDetail extends Activity {
 		country.setText(Constants.TASK_DETAIL_COUNTRY);
 		zipcode.setText(Constants.TASK_DETAIL_ZIPCODE);
 
+        if(Constants.TASK_DETAIL_TASKER_POSTER_NAME==null ||
+                Constants.TASK_DETAIL_TASKER_POSTER_NAME.length()<1){
+            tasker_poster_name.setVisibility(View.GONE);
+            tasker_static.setVisibility(View.GONE);
+
+        } else {
+            tasker_poster_name.setVisibility(View.VISIBLE);
+            tasker_static.setVisibility(View.VISIBLE);
+
+            SpannableString content2 = new SpannableString(Constants.TASK_DETAIL_TASKER_POSTER_NAME);
+            content2.setSpan(new UnderlineSpan(), 0, content2.length(), 0);
+            tasker_poster_name.setText(content2);
+
+
+        }
+
+		tasker_poster_name.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Constants.VIEW_PROFILE_ID = Constants.TASK_DETAIL_TASKER_POSTER_ID;
+                Intent i = new Intent(MyTaskDetail.this, ViewProfile.class);
+                startActivity(i);
+            }
+        });
+
 		date.setText(Constants.TASK_DETAIL_DATE);
+
+
+
+        String dtform = StringUtils.formateDateFromstring("MM-dd-yyyy", "yyyy/MM/dd", Constants.TASK_DETAIL_DATE);
+
+        Constants.TASK_DETAIL_DATE_TO_SEND = dtform;
+
+		comments.setText(Constants.TASK_DETAIL_COMMENTS);
 
 		String UserNAME = Constants.TASK_DETAIL_FNAME + " "
 				+ Constants.TASK_DETAIL_LNAME;
@@ -329,7 +325,37 @@ public class MyTaskDetail extends Activity {
 
 		}
 
-		file_name.setText(Constants.TASK_DETAIL_URL);
+
+		file_name.setText(Constants.TASK_DETAIL_ATTACHMENT_1);
+        file_name2.setText(Constants.TASK_DETAIL_ATTACHMENT_2);
+        file_name3.setText(Constants.TASK_DETAIL_ATTACHMENT_3);
+        file_name4.setText(Constants.TASK_DETAIL_ATTACHMENT_4);
+        file_name5.setText(Constants.TASK_DETAIL_ATTACHMENT_5);
+
+        if(Constants.TASK_DETAIL_ATTACHMENT_2.contains("defaultTask.png")){
+            file_name2.setVisibility(View.GONE);
+        } else {
+            file_name2.setText(Constants.TASK_DETAIL_ATTACHMENT_2);
+        }
+
+        if(Constants.TASK_DETAIL_ATTACHMENT_3.contains("defaultTask.png")){
+            file_name3.setVisibility(View.GONE);
+        } else {
+            file_name3.setText(Constants.TASK_DETAIL_ATTACHMENT_3);
+        }
+
+        if(Constants.TASK_DETAIL_ATTACHMENT_4.contains("defaultTask.png")){
+            file_name4.setVisibility(View.GONE);
+        } else {
+            file_name4.setText(Constants.TASK_DETAIL_ATTACHMENT_4);
+        }
+
+        if(Constants.TASK_DETAIL_ATTACHMENT_5.contains("defaultTask.png")){
+            file_name5.setVisibility(View.GONE);
+        } else {
+            file_name5.setText(Constants.TASK_DETAIL_ATTACHMENT_5);
+        }
+
 
 		/*
 		 * imageLoader.DisplayImage(Constants.TASK_DETAIL_URL, R.drawable.noimg,
@@ -341,11 +367,72 @@ public class MyTaskDetail extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Uri uri = Uri.parse(Constants.TASK_DETAIL_URL); // missing 'http://' will cause crashed
+				try {
+				Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_1); // missing 'http://' will cause crashed
 				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
+        file_name2.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+                Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_2.trim()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
+        file_name3.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+                Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_3.trim()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
+        file_name4.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+                Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_4.trim()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
+        file_name5.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+				try {
+                Uri uri = Uri.parse(Constants.TASK_DETAIL_ATTACHMENT_5.trim()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(),"Error occurred.",Toast.LENGTH_SHORT).show();
+				}
+            }
+        });
 
 		name.setOnClickListener(new OnClickListener() {
 
@@ -406,8 +493,9 @@ public class MyTaskDetail extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				
+
 				if(Constants.TASK_DETAIL_ACCEPTED.equals("0")){
+					showDialog("Task must be deleted in order to edit attachments and comments.");
 				StartEditing();
 				// CallEditAPI();
 				} else {
@@ -423,6 +511,7 @@ public class MyTaskDetail extends Activity {
 			public void onClick(View v) {
 				
 				if(Constants.TASK_DETAIL_ACCEPTED.equals("0")){
+                    showDialog("Task must be deleted in order to edit attachments and comments.");
 				StartEditing();
 				// CallEditAPI();
 				} else {
@@ -521,6 +610,8 @@ public class MyTaskDetail extends Activity {
 		String date_text = date.getText().toString().trim();
 		String price_text = price.getText().toString().trim();
 
+		price_text = price_text.replace("$","");
+
 		if (title_text.length() < 1) {
 			title.setError("Please enter title.");
 		} else if (price_text.length() < 1) {
@@ -571,7 +662,7 @@ public class MyTaskDetail extends Activity {
 
 		// task_image.setEnabled(false);
 		date.setEnabled(false);
-		file_name.setEnabled(false);
+		//file_name.setEnabled(false);
 		
 		/**
 		 * ************** changes ***********************
@@ -605,13 +696,13 @@ public class MyTaskDetail extends Activity {
 		zipcode.setBackgroundResource(0);
 
 		date.setBackgroundResource(0);
-		file_name.setBackgroundResource(0);
+		//file_name.setBackgroundResource(0);
 		// task_image.setBackgroundResource(0);
 
 		startEditing = false;
 
 		title.setText(Constants.TASK_DETAIL_TITLE);
-		price.setText(Constants.TASK_DETAIL_PRICE);
+		price.setText("$ "+Constants.TASK_DETAIL_PRICE);
 		description.setText(Constants.TASK_DETAIL_DESC);
 		address.setText(Constants.TASK_DETAIL_ADDRESS);
 
@@ -622,7 +713,7 @@ public class MyTaskDetail extends Activity {
 
 		date.setText(Constants.TASK_DETAIL_DATE);
 		
-		file_name.setText(Constants.TASK_DETAIL_URL);
+
 
 		/*
 		 * imageLoader.DisplayImage(Constants.TASK_DETAIL_URL, R.drawable.noimg,
@@ -653,7 +744,7 @@ public class MyTaskDetail extends Activity {
 		zipcode.setVisibility(View.VISIBLE);
 
 		date.setEnabled(true);
-		 file_name.setEnabled(true);
+		 //file_name.setEnabled(true);
 
 		startEditing = true;
 
@@ -692,7 +783,7 @@ public class MyTaskDetail extends Activity {
 		zipcode.setBackgroundResource(R.drawable.cellule);
 
 		date.setBackgroundResource(R.drawable.cellule);
-		file_name.setBackgroundResource(R.drawable.cellule);
+		//file_name.setBackgroundResource(R.drawable.cellule);
 
 	}
 
@@ -978,7 +1069,7 @@ public class MyTaskDetail extends Activity {
 				HttpClient httpclient = new DefaultHttpClient();
 
 				HttpClientUpload client = new HttpClientUpload(
-						"http://phphosting.osvin.net/TakeATask/WEB_API/updateTask.php?");
+						"https://takeataskservices.com/WEB_API/updateTask.php?");
 				client.connectForMultipart();
 
 				Log.i("task_id", "" + Constants.TASK_DETAIL_ID);
@@ -991,6 +1082,7 @@ public class MyTaskDetail extends Activity {
 				Log.i("Zipcode", "" + this.ZIPCODE);
 				Log.i("due_date", "" + this.DATE);
 				Log.i("budget", "" + this.PRICE);
+                Log.i("converted date", "" + Constants.TASK_DETAIL_DATE_TO_SEND);
 
 				client.addFormPart("task_id", Constants.TASK_DETAIL_ID);
 				client.addFormPart("title", this.TITLE);
@@ -1162,4 +1254,7 @@ public class MyTaskDetail extends Activity {
        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
        return true;
     }
+
+
+
 }

@@ -2,9 +2,14 @@ package com.takeatask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,16 +21,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.apache.http.message.BasicNameValuePair;
@@ -47,18 +53,14 @@ public class TakeATask extends Activity implements OnClickListener {
 
 	LinearLayout back_ll;
 
-	Button all_task, search;
-
 	ListView listview;
 
-	Spinner category_spinner;
 
 	boolean isConnected;
 
-	LinearLayout ll;
-	//LinearLayout ll1;
-
 	MyAdapter mAdapter;
+
+    MyAdapter1 mAdapter1 ;
 
 	int count = 0;
 
@@ -73,48 +75,18 @@ public class TakeATask extends Activity implements OnClickListener {
 
 	ArrayList<HashMap<String, String>> taskList = new ArrayList<HashMap<String, String>>();
 
-/*	protected void showDialog(String msg) {
-		try {
-			final Dialog dialog;
-			dialog = new Dialog(TakeATask.this);
-			dialog.setCancelable(false);
-			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			dialog.getWindow().setFormat(PixelFormat.TRANSLUCENT);
+	/**
+	 * New  variables
+	 * @param msg
+	 */
 
-			Drawable d = new ColorDrawable(Color.BLACK);
-			d.setAlpha(0);
-			dialog.getWindow().setBackgroundDrawable(d);
+    ImageView cross_button;
+    LinearLayout filter_layout;
+    ImageView filter_image;
 
-			Button ok;
-			TextView message;
+     ViewHolder holder;
 
-			dialog.setContentView(R.layout.dialog);
 
-			ok = (Button) dialog.findViewById(R.id.ok);
-			message = (TextView) dialog.findViewById(R.id.message);
-
-			message.setText(msg);
-
-			ok.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					dialog.dismiss();
-
-					if (isSuccess) {
-						finish();
-					}
-
-				}
-			});
-
-			dialog.show();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}*/
-	
 	public void showDialog(String msg) {
 		try {
 			AlertDialog alertDialog = new AlertDialog.Builder(
@@ -159,66 +131,24 @@ public class TakeATask extends Activity implements OnClickListener {
 				.checkInternetConnectionn(getApplicationContext());
 
 		back = (ImageView) findViewById(R.id.back);
-		all_task = (Button) findViewById(R.id.all_task);
-		search = (Button) findViewById(R.id.search);
-		
 		listview = (ListView) findViewById(R.id.listview);
 		search_layout = (LinearLayout) findViewById(R.id.search_layout);
 		search_editText = (EditText) findViewById(R.id.search_editText);
-		category_spinner = (Spinner) findViewById(R.id.category_spinner);
 		back_ll = (LinearLayout) findViewById(R.id.back_ll);
-		ll = (LinearLayout) findViewById(R.id.ll);
-	//	ll1 = (LinearLayout) findViewById(R.id.ll1);
+        cross_button  = (ImageView) findViewById(R.id.cross_button);
+        filter_image = (ImageView) findViewById(R.id.filter_image);
+        filter_layout = (LinearLayout) findViewById(R.id.filter_layout);
 
-		cat_list.clear();
-		cat_list.add("All Tasks");
 
-		cat_list.addAll(Constants.GLOBAL_categoryList);
 
-		Log.e("cat list local==>", "" + cat_list);
-		Log.e("cat list global==>", "" + Constants.GLOBAL_categoryList);
 
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(
-				getApplicationContext(), R.layout.simple_spinner_item_new,
-				R.id.text, cat_list);
-		category_spinner.setAdapter(dataAdapter);
 
-		category_spinner
-				.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-					@Override
-					public void onItemSelected(AdapterView<?> parent,
-							View view, int position, long id) {
-
-						String category_text = category_spinner
-								.getSelectedItem().toString();
-						if (count > 0) {
-							if (category_text.equalsIgnoreCase("All Tasks")) {
-								mAdapter.filter1("");
-							} else {
-								mAdapter.filter1(category_text);
-							}
-
-						}
-
-						count++;
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> parent) {
-
-					}
-				});
 
 		back.setOnClickListener(this);
-		all_task.setOnClickListener(this);
-		search.setOnClickListener(this);
-	
-		back_ll.setOnClickListener(this);
-		ll.setOnClickListener(this);
-	//	ll1.setOnClickListener(this);
-
-		search_layout.setVisibility(View.GONE);
+        cross_button.setOnClickListener(this);
+        filter_image.setOnClickListener(this);
+        filter_layout.setOnClickListener(this);
+        back_ll.setOnClickListener(this);
 
 		if (isConnected) {
 
@@ -245,12 +175,27 @@ public class TakeATask extends Activity implements OnClickListener {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				try {
-					String text = search_editText.getText().toString()
-							.toLowerCase(Locale.getDefault());
-					mAdapter.filter(text);
-				} catch (Exception e) {
-					e.printStackTrace();
+
+				if (Constants.SEARCH_CAT_ID.length() > 0) {
+
+
+					for (int i = 0; i < cat_list.size(); i++) {
+						if (cat_list.get(i).equalsIgnoreCase(Constants.SEARCH_CAT_NAME)) {
+							//category_spinner.setSelection(i);
+						}
+					}
+
+					mAdapter.filter1(Constants.SEARCH_CAT_NAME);
+
+
+				} else {
+					try {
+						String text = search_editText.getText().toString()
+								.toLowerCase(Locale.getDefault());
+						mAdapter.filter(text);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -260,23 +205,95 @@ public class TakeATask extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v == back || v == back_ll) {
-			finish();
-		} else if (v == search) {
-			search_layout.setVisibility(View.VISIBLE);
-		} else if (v == all_task  || v == ll) {
-			try {
 
-				Log.e("all task===>>>", "all task");
-				search_editText.setText("");
-				mAdapter.filter("");
-				search_layout.setVisibility(View.GONE);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+            Constants.SEARCH_CAT_ID = "";
+            Constants.SEARCH_CAT_NAME = "";
+			finish();
 		}
+
+        else if (v == cross_button) {
+            search_editText.setText("");
+            search_editText.setHint("Search...");
+            mAdapter.filter("");
+		} else if(v==filter_image || v==filter_layout){
+            showFilterDialog();
+        }
 	}
 
-	public class getTaskList extends AsyncTask<Void, Void, Void> {
+    private void showFilterDialog() {
+        final Dialog dialog;
+        dialog = new Dialog(TakeATask.this);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFormat(PixelFormat.TRANSLUCENT);
+
+        Drawable d = new ColorDrawable(Color.BLACK);
+        d.setAlpha(0);
+        dialog.getWindow().setBackgroundDrawable(d);
+
+        ImageView cross_image;
+        RelativeLayout cross_layout;
+        ListView listview;
+
+        dialog.setContentView(R.layout.filter_dialog);
+
+        cross_image = (ImageView) dialog.findViewById(R.id.cross_image);
+        cross_layout = (RelativeLayout) dialog.findViewById(R.id.cross_layout);
+        listview = (ListView) dialog.findViewById(R.id.listview);
+
+        cat_list.clear();
+        cat_list.add("All Tasks");
+
+        cat_list.addAll(Constants.GLOBAL_categoryList);
+
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(
+                getApplicationContext(), R.layout.filter_listitem,
+                R.id.text, cat_list);
+        listview.setAdapter(dataAdapter);
+
+        mAdapter1 = new MyAdapter1(TakeATask.this, cat_list);
+        listview.setAdapter(mAdapter1);
+
+        cross_image.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAdapter.filter1("");
+                dialog.dismiss();
+            }
+        });
+
+        cross_layout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAdapter.filter1("");
+                dialog.dismiss();
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.e("i====>>", "" + i);
+
+                String category_text = cat_list.get(i);
+
+                    if (category_text.equalsIgnoreCase("All Tasks")) {
+                        mAdapter.filter1("");
+                    } else {
+                        mAdapter.filter1(category_text);
+                    }
+
+
+                    dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public class getTaskList extends AsyncTask<Void, Void, Void> {
 		Functions function = new Functions();
 
 		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
@@ -316,13 +333,28 @@ public class TakeATask extends Activity implements OnClickListener {
 					taskList.addAll(result);
 					mAdapter = new MyAdapter(getApplicationContext(), taskList);
 					listview.setAdapter(mAdapter);
+
+
+					if(Constants.SEARCH_CAT_ID.length()>0){
+
+
+						for(int i=0;i<cat_list.size();i++){
+							if(cat_list.get(i).equalsIgnoreCase(Constants.SEARCH_CAT_NAME)){
+								//category_spinner.setSelection(i);
+							}
+						}
+
+						mAdapter.filter1(Constants.SEARCH_CAT_NAME);
+
+
+					}
 				} else {
 					showDialog("No Data found.");
 				}
 			}
 
 			catch (Exception ae) {
-				showDialog(Constants.ERROR_MSG);
+				ae.printStackTrace();
 			}
 
 		}
@@ -448,8 +480,7 @@ public class TakeATask extends Activity implements OnClickListener {
 						.findViewById(R.id.task_name);
 				holder.address = (TextView) convertView
 						.findViewById(R.id.address);
-				holder.no_of_days = (TextView) convertView
-						.findViewById(R.id.no_of_days);
+
 				holder.task_detail = (TextView) convertView
 						.findViewById(R.id.task_detail);
 				holder.apply = (Button) convertView.findViewById(R.id.apply);
@@ -475,26 +506,16 @@ public class TakeATask extends Activity implements OnClickListener {
 			holder.task_detail.setText(content1);
 
 			if (taskList.get(position).get("user_id").equals(Constants.USER_ID)) {
-				// holder.apply.setVisibility(View.INVISIBLE);
+
 				holder.chat.setVisibility(View.INVISIBLE);
 			} else {
-				// holder.apply.setVisibility(View.VISIBLE);
+
 				holder.chat.setVisibility(View.VISIBLE);
 			}
 
 			holder.price.setText(taskList.get(position).get("budget"));
 			holder.task_name.setText(taskList.get(position).get("title"));
-			/*
-			 * holder.address.setText(taskList.get(position).get("address")+" "+
-			 * taskList
-			 * .get(position).get("city")+", "+taskList.get(position).get
-			 * ("state")+
-			 * ", "+taskList.get(position).get("country")+", "+taskList
-			 * .get(position).get("zipcode"));
-			 */
 
-			/*holder.address.setText(taskList.get(position).get("city") + ", "
-					+ taskList.get(position).get("state"));*/
 			
 			List<String> addList = new ArrayList<String>();
 			
@@ -539,41 +560,9 @@ public class TakeATask extends Activity implements OnClickListener {
 
 					int pos = (Integer) v.getTag();
 
-					Constants.TASK_DETAIL_ADDRESS = taskList.get(pos).get(
-							"address");
+					goToTaskDetail(pos);
 
-					Constants.TASK_DETAIL_CITY = taskList.get(pos).get("city");
-					Constants.TASK_DETAIL_STATE = taskList.get(pos)
-							.get("state");
-					Constants.TASK_DETAIL_COUNTRY = taskList.get(pos).get(
-							"country");
-					Constants.TASK_DETAIL_ZIPCODE = taskList.get(pos).get(
-							"zipcode");
 
-					Constants.TASK_DETAIL_DATE = taskList.get(pos).get(
-							"due_date");
-
-					Constants.TASK_DETAIL_DESC = taskList.get(pos).get(
-							"description");
-					Constants.TASK_DETAIL_PRICE = taskList.get(pos).get(
-							"budget");
-					Constants.TASK_DETAIL_TITLE = taskList.get(pos)
-							.get("title");
-					Constants.TASK_DETAIL_URL = taskList.get(pos).get("file");
-					Constants.TASK_DETAIL_USERID = taskList.get(pos).get(
-							"user_id");
-					Constants.TASK_DETAIL_ID = taskList.get(pos).get("id");
-					Constants.TASK_DETAIL_FNAME = taskList.get(pos)
-							.get("fname");
-					Constants.TASK_DETAIL_LNAME = taskList.get(pos)
-							.get("lname");
-					Constants.TASK_DETAIL_CATNAME = taskList.get(pos).get(
-							"category_name");
-					Constants.TASK_DETAIL_SUBCATNAME = taskList.get(pos).get(
-							"subcategory_name");
-
-					Intent i = new Intent(TakeATask.this, TaskDetail.class);
-					startActivity(i);
 				}
 			});
 
@@ -583,41 +572,7 @@ public class TakeATask extends Activity implements OnClickListener {
 				public void onClick(View v) {
 					int pos = (Integer) v.getTag();
 
-					Constants.TASK_DETAIL_ADDRESS = taskList.get(pos).get(
-							"address");
-
-					Constants.TASK_DETAIL_CITY = taskList.get(pos).get("city");
-					Constants.TASK_DETAIL_STATE = taskList.get(pos)
-							.get("state");
-					Constants.TASK_DETAIL_COUNTRY = taskList.get(pos).get(
-							"country");
-					Constants.TASK_DETAIL_ZIPCODE = taskList.get(pos).get(
-							"zipcode");
-
-					Constants.TASK_DETAIL_DATE = taskList.get(pos).get(
-							"due_date");
-
-					Constants.TASK_DETAIL_DESC = taskList.get(pos).get(
-							"description");
-					Constants.TASK_DETAIL_PRICE = taskList.get(pos).get(
-							"budget");
-					Constants.TASK_DETAIL_TITLE = taskList.get(pos)
-							.get("title");
-					Constants.TASK_DETAIL_URL = taskList.get(pos).get("file");
-					Constants.TASK_DETAIL_USERID = taskList.get(pos).get(
-							"user_id");
-					Constants.TASK_DETAIL_ID = taskList.get(pos).get("id");
-					Constants.TASK_DETAIL_FNAME = taskList.get(pos)
-							.get("fname");
-					Constants.TASK_DETAIL_LNAME = taskList.get(pos)
-							.get("lname");
-					Constants.TASK_DETAIL_CATNAME = taskList.get(pos).get(
-							"category_name");
-					Constants.TASK_DETAIL_SUBCATNAME = taskList.get(pos).get(
-							"subcategory_name");
-
-					Intent i = new Intent(TakeATask.this, TaskDetail.class);
-					startActivity(i);
+                    goToTaskDetail(pos);
 
 				}
 			});
@@ -641,7 +596,60 @@ public class TakeATask extends Activity implements OnClickListener {
 			return convertView;
 		}
 
-		protected void SendRequest(String to_id, String task_id, String price) {
+        private void goToTaskDetail(int pos) {
+            Constants.TASK_DETAIL_ADDRESS = taskList.get(pos).get(
+					"address");
+
+            Constants.TASK_DETAIL_CITY = taskList.get(pos).get("city");
+            Constants.TASK_DETAIL_STATE = taskList.get(pos)
+                    .get("state");
+            Constants.TASK_DETAIL_COUNTRY = taskList.get(pos).get(
+					"country");
+            Constants.TASK_DETAIL_ZIPCODE = taskList.get(pos).get(
+                    "zipcode");
+
+            Constants.TASK_DETAIL_DATE = taskList.get(pos).get(
+                    "due_date");
+
+            Constants.TASK_DETAIL_DESC = taskList.get(pos).get(
+					"description");
+            Constants.TASK_DETAIL_PRICE = taskList.get(pos).get(
+					"budget");
+            Constants.TASK_DETAIL_TITLE = taskList.get(pos)
+                    .get("title");
+           // Constants.TASK_DETAIL_URL = taskList.get(pos).get("file");
+            Constants.TASK_DETAIL_USERID = taskList.get(pos).get(
+					"user_id");
+            Constants.TASK_DETAIL_ID = taskList.get(pos).get("id");
+            Constants.TASK_DETAIL_FNAME = taskList.get(pos)
+                    .get("fname");
+            Constants.TASK_DETAIL_LNAME = taskList.get(pos)
+                    .get("lname");
+            Constants.TASK_DETAIL_CATNAME = taskList.get(pos).get(
+					"category_name");
+            Constants.TASK_DETAIL_SUBCATNAME = taskList.get(pos).get(
+                    "subcategory_name");
+
+			Constants.TASK_DETAIL_COMMENTS = taskList.get(pos).get("comments");
+
+            String attachmentListString  = taskList.get(pos).get("attachments");
+
+            String str = attachmentListString;
+            List<String> attachmentList = Arrays.asList(str.split(","));
+
+
+            Constants.TASK_DETAIL_ATTACHMENT_1 = attachmentList.get(0);
+            Constants.TASK_DETAIL_ATTACHMENT_2 = attachmentList.get(1);
+            Constants.TASK_DETAIL_ATTACHMENT_3 = attachmentList.get(2);
+            Constants.TASK_DETAIL_ATTACHMENT_4 = attachmentList.get(3);
+            Constants.TASK_DETAIL_ATTACHMENT_5 = attachmentList.get(4);
+
+            Log.e("**** attch 1 ****", "" + Constants.TASK_DETAIL_ATTACHMENT_1);
+
+            Intent i = new Intent(TakeATask.this, TaskDetail.class);
+            startActivity(i);
+        }
+        protected void SendRequest(String to_id, String task_id, String price) {
 			if (isConnected) {
 
 				new SendRequestCall(to_id, task_id, price).execute(new Void[0]);
@@ -744,7 +752,79 @@ public class TakeATask extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 
+        Constants.SEARCH_CAT_ID = "";
+        Constants.SEARCH_CAT_NAME = "";
+
 		Intent i = new Intent(TakeATask.this, Home.class);
 		startActivity(i);
 	}
+
+
+    //******************************* filter ADapter ****************************************//
+
+    class MyAdapter1 extends BaseAdapter {
+
+        LayoutInflater mInflater = null;
+
+
+        public MyAdapter1(Context context,
+                         ArrayList<String> cat_list) {
+            mInflater = LayoutInflater.from(getApplicationContext());
+
+        }
+
+
+        @Override
+        public int getCount() {
+
+            return cat_list.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return cat_list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = mInflater.inflate(
+                        R.layout.filter_listitem, null);
+
+                holder.text = (TextView) convertView.findViewById(R.id.text);
+                holder.checkbox = (CheckBox) convertView.findViewById(R.id.checkbox);
+
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            holder.checkbox.setTag(position);
+            holder.checkbox.setVisibility(View.GONE);
+
+            holder.text.setText(cat_list.get(position));
+
+            return convertView;
+        }
+
+
+
+    }
+
+    class ViewHolder {
+        TextView text;
+        CheckBox checkbox;
+
+    }
+
+
 }

@@ -11,4 +11,10 @@
     <color  name = "grey">#374351</color>
     <color  name = "light_grey">#b85f35</color>
     <color name="grey_text_color">#e5d7d4</color>
+
+    <color name="green">#40FF00</color>
+
+    <color name="dark_orange">#b3562a</color>
+
+    <color name="lightgrey">#0E152A</color>
 </resources>

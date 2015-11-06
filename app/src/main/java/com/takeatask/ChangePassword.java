@@ -249,7 +249,8 @@ public class ChangePassword extends Activity implements OnClickListener {
 
 					String msg = (String) result.get("Message");
 					Log.e("msg===>>", "" + msg);
-					showDialog(msg);
+					/*showDialog(msg);*/
+					showDialog("Your current password is not correct.");
 				}
 			}
 

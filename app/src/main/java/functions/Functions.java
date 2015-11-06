@@ -7,14 +7,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Functions {
 
 	JSONParser json = new JSONParser();
-	public static String url = "http://phphosting.osvin.net/TakeATask/WEB_API/";
+	//public static String url = "http://phphosting.osvin.net/TakeATask/WEB_API/";
 
-   // public static String url="https://takeataskservices.com/WEB_API/";
+    public static String url="https://takeataskservices.com/WEB_API/";
 
 	/**
 	 * Login
@@ -52,6 +53,7 @@ public class Functions {
 				// localHashMap.put("access_token",localJSONObject.getString("access_token"));
 
 				localHashMap.put("email", localJSONObject.getString("email"));
+                localHashMap.put("login_via", localJSONObject.getString("login_via"));
 
 			} else {
 				localHashMap.put("ResponseCode", "false");
@@ -97,6 +99,8 @@ public class Functions {
 				// result.getString("access_token"));
 				localHashMap.put("email", result.getString("email"));
 				localHashMap.put("user_id", result.getString("user_id"));
+				localHashMap.put("", result.getString("user_id"));
+                localHashMap.put("signup_via", result.getString("signup_via"));
 
 			} else {
 				localHashMap.put("ResponseCode", "false");
@@ -175,6 +179,8 @@ public class Functions {
 				// result.getString("access_token"));
 				localHashMap.put("TotalMessage",
 						localJSONObject.getString("TotalMessage"));
+                localHashMap.put("TotalBidCount",
+                        localJSONObject.getString("TotalBidCount"));
 
 			} else {
 				localHashMap.put("ResponseCode", "false");
@@ -458,11 +464,30 @@ public class Functions {
 							.getString("category_id"));
 					localhashMap.put("subcategory_name", Data.getJSONObject(i)
 							.getString("subcategory_name"));
+                    localhashMap.put("comments", Data.getJSONObject(i)
+                            .getString("comments"));
 
 					localhashMap.put("accepted", Data.getJSONObject(i)
 							.getString("accepted"));
+                    	localhashMap.put("accepted_by", Data.getJSONObject(i).getString("accepted_by"));
+                    localhashMap.put("accepted_fname", Data.getJSONObject(i).getString("accepted_fname"));
+                    localhashMap.put("accepted_lname", Data.getJSONObject(i).getString("accepted_lname"));
+                    localhashMap.put("accepted_pic", Data.getJSONObject(i).getString("accepted_pic"));
+
+                    JSONArray fileArray = Data.getJSONObject(i).getJSONArray("attachments");
+                    Constants.AttachmentList.clear();
+                    for(int j=0;j<fileArray.length();j++){
+                        Constants.AttachmentList.add(fileArray.getString(j));
+                    }
+                    Constants.AttachmentList.removeAll(Arrays.asList("", null));
+                    String ATTACHMENTS = Constants.AttachmentList.toString().replace("[", "")
+                            .replace("]", "").replace(", ", ", ");
+
+                    localhashMap.put("attachments", ATTACHMENTS);
 
 					localArrayList1.add(localhashMap);
+
+
 
 				}
 
@@ -497,17 +522,45 @@ public class Functions {
 
 				JSONArray Data = localJSONObject.getJSONArray("result");
 				for (int i = 0; i < Data.length(); i++) {
+
+
 					HashMap<String, String> localhashMap = new HashMap<String, String>();
-					localhashMap.put("task_id", Data.getJSONObject(i)
-							.getString("task_id"));
-					localhashMap.put("title",
-							Data.getJSONObject(i).getString("title"));
-					localhashMap.put("description", Data.getJSONObject(i)
-							.getString("description"));
-					localhashMap.put("price",
-							Data.getJSONObject(i).getString("price"));
-					localhashMap.put("user_id", Data.getJSONObject(i)
-							.getString("user_id"));
+					localhashMap.put("task_id", Data.getJSONObject(i).getString("task_id"));
+					localhashMap.put("title", Data.getJSONObject(i).getString("title"));
+					localhashMap.put("description", Data.getJSONObject(i).getString("description"));
+					localhashMap.put("price", Data.getJSONObject(i).getString("price"));
+					localhashMap.put("user_id", Data.getJSONObject(i).getString("user_id"));
+
+					localhashMap.put("fname", Data.getJSONObject(i).getString("fname"));
+					localhashMap.put("lname", Data.getJSONObject(i).getString("lname"));
+					localhashMap.put("profile_pic", Data.getJSONObject(i).getString("profile_pic"));
+					localhashMap.put("address", Data.getJSONObject(i).getString("address"));
+					localhashMap.put("city", Data.getJSONObject(i).getString("city"));
+					localhashMap.put("state", Data.getJSONObject(i).getString("state"));
+					localhashMap.put("country", Data.getJSONObject(i).getString("country"));
+					localhashMap.put("zipcode", Data.getJSONObject(i).getString("zipcode"));
+
+					localhashMap.put("accepted", Data.getJSONObject(i).getString("accepted"));
+					localhashMap.put("due_date", Data.getJSONObject(i).getString("due_date"));
+					localhashMap.put("category_id", Data.getJSONObject(i).getString("category_id"));
+					localhashMap.put("category_name", Data.getJSONObject(i).getString("category_name"));
+					localhashMap.put("subcategory_id", Data.getJSONObject(i).getString("subcategory_id"));
+					localhashMap.put("subcategory_name", Data.getJSONObject(i).getString("subcategory_name"));
+                    localhashMap.put("comments", Data.getJSONObject(i)
+                            .getString("comments"));
+
+
+                    JSONArray fileArray = Data.getJSONObject(i).getJSONArray("attachments");
+                    Constants.AttachmentList.clear();
+                    for(int j=0;j<fileArray.length();j++){
+                        Constants.AttachmentList.add(fileArray.getString(j));
+                    }
+                    Constants.AttachmentList.removeAll(Arrays.asList("", null));
+                    String ATTACHMENTS = Constants.AttachmentList.toString().replace("[", "")
+                            .replace("]", "").replace(", ", ", ");
+
+                    localhashMap.put("attachments", ATTACHMENTS);
+
 
 					localArrayList1.add(localhashMap);
 
@@ -738,6 +791,8 @@ public class Functions {
 							.getString("subcategory_name"));
 					localhashMap.put("subcategory_id", Data.getJSONObject(i)
 							.getString("subcategory_id"));
+					localhashMap.put("comments", Data.getJSONObject(i)
+							.getString("comments"));
 
 					localhashMap.put("user_id", Data.getJSONObject(i)
 							.getString("user_id"));
@@ -748,6 +803,18 @@ public class Functions {
 							Data.getJSONObject(i).getString("lname"));
 					localhashMap.put("profile_pic", Data.getJSONObject(i)
 							.getString("profile_pic"));
+
+
+                    JSONArray fileArray = Data.getJSONObject(i).getJSONArray("attachments");
+                    Constants.AttachmentList.clear();
+                    for(int j=0;j<fileArray.length();j++){
+                        Constants.AttachmentList.add(fileArray.getString(j));
+                    }
+                    Constants.AttachmentList.removeAll(Arrays.asList("", null));
+                    String ATTACHMENTS = Constants.AttachmentList.toString().replace("[", "")
+                            .replace("]", "").replace(", ", ", ");
+
+                    localhashMap.put("attachments", ATTACHMENTS);
 
 					localArrayList1.add(localhashMap);
 
@@ -793,10 +860,14 @@ public class Functions {
 							.getString("user_id"));
 					localhashMap.put("fname",
 							Data.getJSONObject(i).getString("fname"));
+					localhashMap.put("lname",
+							Data.getJSONObject(i).getString("lname"));
 					localhashMap.put("message", Data.getJSONObject(i)
 							.getString("message"));
 					localhashMap.put("task_id", Data.getJSONObject(i)
 							.getString("task_id"));
+					localhashMap.put("profile_pic", Data.getJSONObject(i)
+							.getString("profile_pic"));
 
 					/*
 					 * localhashMap.put("task_id",
@@ -1475,4 +1546,92 @@ public class Functions {
 		}
 
 	}
+
+    public ArrayList<HashMap<String, String>> getBiddingNotification(
+            ArrayList localArrayList) {
+        ArrayList<HashMap<String, String>> localArrayList1 = new ArrayList<HashMap<String, String>>();
+
+        try {
+
+            JSONObject localJSONObject = new JSONObject(Html.fromHtml(
+                    this.json.makeHttpRequest(url + "listAlertNotifications.php?", "POST",
+                            localArrayList)).toString());
+
+            String resopnse = localJSONObject.getString("ResponseCode");
+            if (resopnse.equalsIgnoreCase("true")) {
+
+                JSONArray Data = localJSONObject.getJSONArray("result");
+                for (int i = 0; i < Data.length(); i++) {
+                    HashMap<String, String> localhashMap = new HashMap<String, String>();
+                    localhashMap.put("id", Data.getJSONObject(i).getString("id"));
+                    localhashMap.put("from_id", Data.getJSONObject(i).getString("from_id"));
+                    localhashMap.put("from_name", Data.getJSONObject(i).getString("from_name"));
+                    localhashMap.put("profile_pic", Data.getJSONObject(i).getString("profile_pic"));
+                    localhashMap.put("message", Data.getJSONObject(i).getString("message"));
+                    localhashMap.put("title", Data.getJSONObject(i).getString("title"));
+                    localhashMap.put("description", Data.getJSONObject(i).getString("description"));
+                    localhashMap.put("file", Data.getJSONObject(i).getString("file"));
+                    localhashMap.put("task_posted_on", Data.getJSONObject(i).getString("task_posted_on"));
+
+
+
+                    localArrayList1.add(localhashMap);
+
+                }
+
+            }
+            return localArrayList1;
+
+        } catch (Exception ae) {
+            ae.printStackTrace();
+            return localArrayList1;
+
+        }
+
+    }
+    /**
+     * get Pending rating
+     */
+
+    public HashMap GetPendingRating(
+            ArrayList localArrayList) {
+        ArrayList<HashMap<String, String>> localArrayList1 = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> localHashMap = new HashMap<String, String>();
+
+        try {
+
+            JSONObject localJSONObject = new JSONObject(Html.fromHtml(
+                    this.json.makeHttpRequest(url
+                                    + "listUserForRatings.php?", "POST",
+                            localArrayList)).toString());
+
+            String resopnse = localJSONObject.getString("ResponseCode");
+            if (resopnse.equalsIgnoreCase("true")) {
+
+                JSONArray Data = localJSONObject.getJSONArray("data");
+                //    for (int i = 0; i < Data.length(); i++) {
+                //        HashMap<String, String> localhashMap = new HashMap<String, String>();
+                localHashMap.put("from_id", Data.getJSONObject(0).getString("from_id"));
+                localHashMap.put("to_id", Data.getJSONObject(0).getString("to_id"));
+                localHashMap.put("to_name", Data.getJSONObject(0).getString("to_name"));
+				localHashMap.put("title", Data.getJSONObject(0).getString("title"));
+                localHashMap.put("ResponseCode", "true");
+
+
+                //   }
+
+            } else {
+                localHashMap.put("ResponseCode", "false");
+            }
+
+            return localHashMap;
+        } catch (Exception ae) {
+            ae.printStackTrace();
+
+            return localHashMap;
+
+        }
+
+    }
+
 }

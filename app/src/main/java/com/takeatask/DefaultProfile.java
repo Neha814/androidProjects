@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.circularImageview.ScalingUtilities;
+import com.imageloader.ImageLoader;
 
 import org.apache.http.message.BasicNameValuePair;
 
@@ -54,7 +55,7 @@ public class DefaultProfile extends Activity implements OnClickListener {
 	ListView listview;
 	RatingBar ratingBar;
 	boolean isConnected;
-	//ImageLoader imageLoader;
+	ImageLoader imageLoader;
 	ImageView blurr_img;
 	
 	TextView review_static;
@@ -64,6 +65,9 @@ public class DefaultProfile extends Activity implements OnClickListener {
 	MyAdapter mAdapter;
 	
 	List<String> addList = new ArrayList<String>();
+
+	LinearLayout ll_edit;
+	ImageView edit;
 
 	TransparentProgressDialog db;
 
@@ -146,7 +150,7 @@ public class DefaultProfile extends Activity implements OnClickListener {
 		isConnected = NetConnection
 				.checkInternetConnectionn(getApplicationContext());
 
-		//imageLoader = new ImageLoader(getApplicationContext());
+		imageLoader = new ImageLoader(getApplicationContext());
 
 		back = (ImageView) findViewById(R.id.back);
 		profile_pic = (ImageView) findViewById(R.id.profile_pic);
@@ -163,10 +167,14 @@ public class DefaultProfile extends Activity implements OnClickListener {
 		occupation = (TextView) findViewById(R.id.occupation);
 		language = (TextView) findViewById(R.id.language);
 		back_ll = (LinearLayout) findViewById(R.id.back_ll);
+		edit = (ImageView) findViewById(R.id.edit);
+		ll_edit = (LinearLayout) findViewById(R.id.ll_edit);
 		
 		review_static.setVisibility(View.INVISIBLE);
 
 		back.setOnClickListener(this);
+		edit.setOnClickListener(this);
+		ll_edit.setOnClickListener(this);
 
 		getProfileCall();
 	}
@@ -177,12 +185,21 @@ public class DefaultProfile extends Activity implements OnClickListener {
 		} else {
 			showDialog(Constants.No_INTERNET);
 		}
+
+		if(Constants.LOGIN_TYPE.equalsIgnoreCase("fb")){
+			ll_edit.setVisibility(View.GONE);
+		} else {
+			ll_edit.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v == back || v==back_ll) {
 			Intent i = new Intent(DefaultProfile.this, Home.class);
+			startActivity(i);
+		} else if(v==edit || v==ll_edit){
+			Intent i = new Intent(DefaultProfile.this, Profile.class);
 			startActivity(i);
 		}
 	}
@@ -393,17 +410,18 @@ public class DefaultProfile extends Activity implements OnClickListener {
 			
 			final String  profile_text = Constants.FollowersList.get(position).get("profile_pic");
 			
-			//imageLoader.DisplayImage(profile_text, R.drawable.noimg,holder.profile_pic);
+			imageLoader.DisplayImage(profile_text, R.drawable.noimg,holder.profile_pic);
 
-			Thread t = new Thread(){
+		/*	Thread t = new Thread(){
 				public void run(){
+
 					final Bitmap bitmapToGetFromURL = getBitmapFromURL(profile_text);
 
 					runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
-							/*croppedBitmap(bitmapToGetFromURL);*/
+							*//*croppedBitmap(bitmapToGetFromURL);*//*
 
 
 
@@ -434,7 +452,7 @@ public class DefaultProfile extends Activity implements OnClickListener {
 					});
 
 				}
-			};t.start();
+			};t.start();*/
 
 			return convertView;
 		}
@@ -498,11 +516,12 @@ public class DefaultProfile extends Activity implements OnClickListener {
 			return myBitmap;
 		}
 
-		catch(
-				IOException e
-				)
+		catch(IOException e)
 
 		{
+			e.printStackTrace();
+			return null;
+		} catch(Exception e){
 			e.printStackTrace();
 			return null;
 		}

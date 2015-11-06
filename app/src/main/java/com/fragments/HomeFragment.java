@@ -1,29 +1,8 @@
 package com.fragments;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.apache.http.message.BasicNameValuePair;
-
-import functions.Constants;
-import functions.Functions;
-
-import com.takeatask.CategoryListing;
-import com.takeatask.R;
-
-import utils.NetConnection;
-import utils.TransparentProgressDialog;
-import com.imageloader.ImageLoader;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,15 +11,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.imageloader.ImageLoader;
+import com.takeatask.R;
+import com.takeatask.TakeATask;
+
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import functions.Constants;
+import functions.Functions;
+import utils.NetConnection;
+import utils.TransparentProgressDialog;
 
 public class HomeFragment extends Fragment {
 
@@ -133,7 +123,12 @@ public class HomeFragment extends Fragment {
 				Constants.HOME_CATEGORY_NAME = categoryList.get(position).get(
 						"title");
 
-				Intent i = new Intent(getActivity(), CategoryListing.class);
+				Constants.SEARCH_CAT_ID = categoryList.get(position).get(
+						"id");
+				Constants.SEARCH_CAT_NAME = categoryList.get(position).get(
+						"title");
+
+				Intent i = new Intent(getActivity(), TakeATask.class);
 				startActivity(i);
 			}
 		});

@@ -2,23 +2,18 @@ package com.takeatask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +25,9 @@ import android.widget.Toast;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import functions.Constants;
 import functions.Functions;
@@ -286,38 +283,71 @@ public class CurrentPerformingTasks extends Activity implements OnClickListener{
 						.findViewById(R.id.description);
 				holder.price = (TextView) convertView.findViewById(R.id.price);
 				
-				holder.view_profile = (TextView) convertView.findViewById(R.id.view_profile);
+				holder.task_details = (TextView) convertView.findViewById(R.id.task_details);
+
+                holder.ll = (LinearLayout) convertView.findViewById(R.id.ll);
 				
 				holder.complete = (Button) convertView.findViewById(R.id.complete);
+
+                holder.chat = (TextView) convertView.findViewById(R.id.chat);
 
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
 			
-			holder.view_profile.setTag(position);
-			
+			holder.task_details.setTag(position);
+            holder.ll.setTag(position);
+			holder.chat.setTag(position);
 			holder.complete.setTag(position);
 			
-			SpannableString content1 = new SpannableString("View Profile");
+			SpannableString content1 = new SpannableString("View Task Details");
 			content1.setSpan(new UnderlineSpan(), 0, content1.length(), 0);
-			holder.view_profile.setText(content1);
+			holder.task_details.setText(content1);
 			
 			holder.title.setText(currentPostedList.get(position).get("title"));
 			holder.description.setText(currentPostedList.get(position).get(
 					"description"));
 			holder.price.setText("$ "+ currentPostedList.get(position).get("price"));
 			
-			
-			holder.view_profile.setOnClickListener(new OnClickListener() {
+			holder.ll.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = (Integer) view.getTag();
+
+                    goToTaskDetailHistory(pos);
+
+
+                }
+            });
+			holder.task_details.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					int pos = (Integer) v.getTag();
-					Constants.VIEW_PROFILE_ID = currentPostedList.get(pos).get("user_id");
-				ViewProfile();
+					//Constants.VIEW_PROFILE_ID = currentPostedList.get(pos).get("user_id");
+				    //ViewProfile();
+                    goToTaskDetailHistory(pos);
+
+
 				}
 			});
+            holder.chat.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = (Integer) view.getTag();
+
+                    Constants.RECEIVER_ID = currentPostedList.get(pos).get("user_id");
+                    Constants.CHAT_NAME = currentPostedList.get(pos).get("fname") + " "
+                            + currentPostedList.get(pos).get("lname");
+                    Constants.CHAT_IMAGE = currentPostedList.get(pos).get("profile_pic");
+                    Constants.SENDER_ID = Constants.USER_ID;
+
+                    Intent i = new Intent(CurrentPerformingTasks.this, ChatScreen.class);
+                    startActivity(i);
+                }
+            });
+
 			
 			holder.complete.setOnClickListener(new OnClickListener() {
 				
@@ -327,13 +357,59 @@ public class CurrentPerformingTasks extends Activity implements OnClickListener{
 					
 					String task_id = currentPostedList.get(pos).get("task_id");
 					String to_id = currentPostedList.get(pos).get("user_id");
+
+					Constants.REVIEW_TASK_ID = task_id;
 					
-					showConfirmationDialog("Are you sure you want to complete this Task ?" , task_id , to_id);
+					showConfirmationDialog("Are you sure you want to complete this Task ?", task_id , to_id);
 					
 				}
 			});
 
 			return convertView;
+		}
+
+		private void goToTaskDetailHistory(int pos) {
+            Constants.TASK_DETAIL_ADDRESS = currentPostedList.get(pos).get("address");
+
+            Constants.TASK_DETAIL_CITY =currentPostedList.get(pos).get("city") ;
+            Constants.TASK_DETAIL_STATE = currentPostedList.get(pos).get("state");
+            Constants.TASK_DETAIL_COUNTRY =currentPostedList.get(pos).get("country") ;
+            Constants.TASK_DETAIL_ZIPCODE = currentPostedList.get(pos).get("zipcode");
+
+
+            Constants.TASK_DETAIL_DATE = currentPostedList.get(pos).get("due_date");
+
+            Constants.TASK_DETAIL_DESC = currentPostedList.get(pos).get("description");
+            Constants.TASK_DETAIL_PRICE = currentPostedList.get(pos).get("price");
+            Constants.TASK_DETAIL_TITLE = currentPostedList.get(pos).get("title");
+           // Constants.TASK_DETAIL_URL = currentPostedList.get(pos).get("file");
+            Constants.TASK_DETAIL_USERID = currentPostedList.get(pos).get("user_id");
+            Constants.TASK_DETAIL_ID = currentPostedList.get(pos).get("task_id");
+            Constants.TASK_DETAIL_FNAME = currentPostedList.get(pos).get("fname");
+            Constants.TASK_DETAIL_LNAME = currentPostedList.get(pos).get("lname");
+            Constants.TASK_DETAIL_CATNAME = currentPostedList.get(pos).get("category_name");
+            Constants.TASK_DETAIL_SUBCATNAME = currentPostedList.get(pos).get("subcategory_name");
+			Constants.TASK_DETAIL_COMMENTS = currentPostedList.get(pos).get("comments");
+            Constants.TASK_DETAIL_ACCEPTED = "";
+            Constants.TASK_DETAIL_TASKER_POSTER_NAME = "";
+            Constants.TASK_DETAIL_TASKER_POSTER_ID = "";
+
+            String attachmentListString  = currentPostedList.get(pos).get("attachments");
+
+            String str = attachmentListString;
+            List<String> attachmentList = Arrays.asList(str.split(","));
+
+
+
+            Constants.TASK_DETAIL_ATTACHMENT_1 = attachmentList.get(0);
+            Constants.TASK_DETAIL_ATTACHMENT_2 = attachmentList.get(1);
+            Constants.TASK_DETAIL_ATTACHMENT_3 = attachmentList.get(2);
+            Constants.TASK_DETAIL_ATTACHMENT_4 = attachmentList.get(3);
+            Constants.TASK_DETAIL_ATTACHMENT_5 = attachmentList.get(4);
+
+			Log.e("**** attch 1 ****", "" + Constants.TASK_DETAIL_ATTACHMENT_1);
+            Intent i = new Intent(CurrentPerformingTasks.this , TaskDetailHistory.class);
+            startActivity(i);
 		}
 
 		protected void ViewProfile() {
@@ -348,7 +424,11 @@ public class CurrentPerformingTasks extends Activity implements OnClickListener{
 			
 			Button complete;
 			
-			TextView view_profile;
+			TextView task_details;
+
+			LinearLayout ll;
+
+			TextView chat;
 
 		}
 
@@ -362,48 +442,41 @@ public class CurrentPerformingTasks extends Activity implements OnClickListener{
 		startActivity(i);
 	}
 	
-	protected void showConfirmationDialog(String message , final String task_id , final String to_id) {
-		final Dialog dialog;
-		dialog = new Dialog(CurrentPerformingTasks.this);
-		dialog.setCancelable(false);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.getWindow().setFormat(PixelFormat.TRANSLUCENT);
 
-		Drawable d = new ColorDrawable(Color.BLACK);
-		d.setAlpha(0);
-		dialog.getWindow().setBackgroundDrawable(d);
 
-		Button yes, no;
-		TextView msg;
+	protected void showConfirmationDialog(final String message , final String task_id , final String to_id) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(CurrentPerformingTasks.this);
 
-		dialog.setContentView(R.layout.logout);
-		yes = (Button) dialog.findViewById(R.id.yes);
-		no = (Button) dialog.findViewById(R.id.no);
-		msg = (TextView) dialog.findViewById(R.id.msg);
+		// Setting Dialog Title
+		alertDialog.setTitle("Exit...");
 
-		msg.setText(message);
+		// Setting Dialog Message
+		alertDialog.setMessage(message);
 
-		yes.setOnClickListener(new OnClickListener() {
+		// Setting Icon to Dialog
+		//alertDialog.setIcon(R.drawable.alarm);
 
-			@Override
-			public void onClick(View v) {
+		// Setting Positive "Yes" Button
+		alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
 
-				dialog.dismiss();
+				dialog.cancel();
+                CompleteTask(task_id , to_id);
 
-				CompleteTask(task_id , to_id);
 			}
 		});
 
-		no.setOnClickListener(new OnClickListener() {
+		// Setting Negative "NO" Button
+		alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				// Write your code here to invoke NO event
 
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
+				dialog.cancel();
 			}
 		});
 
-		dialog.show();
-
+		// Showing Alert Message
+		alertDialog.show();
 	}
 
 	protected void CompleteTask(String task_id , String to_id) {
@@ -469,7 +542,7 @@ public class CurrentPerformingTasks extends Activity implements OnClickListener{
 			try {
 				if (result.get("ResponseCode").equals("true")) {
 
-					String msg = "Post is completed successfully.";
+
 				Toast.makeText(getApplicationContext(), "Task completed successfully.", Toast.LENGTH_SHORT).show();
 
 					Constants.TASK_DETAIL_USERID= this.toID;
