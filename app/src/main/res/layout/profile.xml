@@ -47,7 +47,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3" >
+            android:layout_weight="4.5" >
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -95,8 +95,8 @@
                     
                          <com.circularImageview.RoundedImageView
                         android:id="@+id/profile_pic"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
@@ -109,7 +109,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7"
+            android:layout_weight="5.5"
             android:paddingBottom="5dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
@@ -351,12 +351,7 @@
                     android:layout_height="1dp"
                     android:background="@color/white" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="center"
-                    android:orientation="horizontal" >
+
 
                     <EditText
                         android:id="@+id/background"
@@ -364,11 +359,12 @@
                         android:layout_height="80dp"
                         android:background="@drawable/white_rounded_box"
                         android:gravity="top|left"
-                        android:hint="Something about me"
-                        android:inputType="textCapWords"
                         android:padding="5dp"
-                        android:singleLine="true" />
-                </LinearLayout>
+                        android:layout_marginTop="15dp"
+                        android:hint="Something about me"
+                        android:inputType="textCapWords|textMultiLine"
+                       />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

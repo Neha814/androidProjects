@@ -193,7 +193,7 @@ public class Profile extends Activity implements OnClickListener {
         getProfileCall();
 
         if(Constants.LOGIN_TYPE.equalsIgnoreCase("fb")){
-            profile_pic.setOnClickListener(null);
+            profile_pic.setOnClickListener(this);
             firstname.setEnabled(false);
             lastname.setEnabled(false);
         } else {
@@ -391,6 +391,8 @@ public class Profile extends Activity implements OnClickListener {
                 client.addFormPart("emailId", Constants.EMAIL);
                 client.addFormPart("authkey", Constants.AUTH_KEY);
 
+                client.addFormPart("login_via", Constants.LOGIN_TYPE);
+
                 if (!(imgFileGallery.getName().equals("") || imgFileGallery
                         .getName() == null)) {
 
@@ -472,6 +474,7 @@ public class Profile extends Activity implements OnClickListener {
             try {
                 localArrayList.add(new BasicNameValuePair("authkey", Constants.AUTH_KEY));
                 localArrayList.add(new BasicNameValuePair("id", this.id));
+
 
                 result = function.getProfile(localArrayList);
 

@@ -54,6 +54,7 @@
             <!-- ******** profile *************** -->
 
             <LinearLayout
+                android:id="@+id/profile_layout"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
@@ -86,6 +87,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/profile_view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/white" />
@@ -212,6 +214,7 @@
             <!-- ******************* passwords **************** -->
 
             <LinearLayout
+                android:id="@+id/password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="15dp"
@@ -244,6 +247,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/password_view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/white" />

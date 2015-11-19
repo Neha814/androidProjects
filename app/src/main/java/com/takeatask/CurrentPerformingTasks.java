@@ -308,18 +308,18 @@ public class CurrentPerformingTasks extends Activity implements OnClickListener{
 			holder.title.setText(currentPostedList.get(position).get("title"));
 			holder.description.setText(currentPostedList.get(position).get(
 					"description"));
-			holder.price.setText("$ "+ currentPostedList.get(position).get("price"));
+			holder.price.setText("$ " + currentPostedList.get(position).get("price"));
 			
 			holder.ll.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = (Integer) view.getTag();
+				@Override
+				public void onClick(View view) {
+					int pos = (Integer) view.getTag();
 
-                    goToTaskDetailHistory(pos);
+					goToTaskDetailHistory(pos);
 
 
-                }
-            });
+				}
+			});
 			holder.task_details.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -348,19 +348,25 @@ public class CurrentPerformingTasks extends Activity implements OnClickListener{
                 }
             });
 
+
 			
 			holder.complete.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					int pos = (Integer) v.getTag();
-					
+
+					String paymentAdded = currentPostedList.get(pos).get("paymentAdded");
 					String task_id = currentPostedList.get(pos).get("task_id");
 					String to_id = currentPostedList.get(pos).get("user_id");
 
-					Constants.REVIEW_TASK_ID = task_id;
-					
-					showConfirmationDialog("Are you sure you want to complete this Task ?", task_id , to_id);
+					if(paymentAdded.equals("1")) {
+						Constants.REVIEW_TASK_ID = task_id;
+
+						showConfirmationDialog("Are you sure you want to complete this Task ?", task_id, to_id);
+					} else if(paymentAdded.equals("0")) {
+						showDialog("Please add your PayPal ID in settings screen to complete your task.");
+					}
 					
 				}
 			});

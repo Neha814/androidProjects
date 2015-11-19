@@ -102,10 +102,10 @@ public class Home extends FragmentActivity implements OnClickListener {
 
 		Constants.EMAIL = sp.getString("email", "");
 		Constants.USER_ID = sp.getString("user_id", "");
+		Constants.LOGIN_TYPE = sp.getString("login_type","");
 
 
-
-		
+		Log.e("Login type ======>>>",""+Constants.LOGIN_TYPE);
 		
 		
 

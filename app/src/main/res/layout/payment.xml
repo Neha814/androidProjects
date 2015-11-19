@@ -55,6 +55,7 @@
         <RelativeLayout
             android:id="@+id/credit_card_layout"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="80dp" >
             <ImageView
             android:id="@+id/card_no"

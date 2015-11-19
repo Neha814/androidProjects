@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +54,7 @@ public class ViewProfile extends Activity implements OnClickListener {
 	ImageView back;
 	ImageView profile_pic;
 	TextView name, location, memeber_since, rating, about_me, no_of_reviews,
-			occupation, language;
+			occupation, language, paypal_id;
 	ListView listview;
 	RatingBar ratingBar;
 	boolean isConnected;
@@ -70,6 +72,8 @@ public class ViewProfile extends Activity implements OnClickListener {
 	TransparentProgressDialog db;
 
 	List<String> addList = new ArrayList<String>();
+
+	ScrollView scrollview;
 
 	/*
 	 * protected void showDialog(String msg) { try { final Dialog dialog; dialog
@@ -158,6 +162,10 @@ public class ViewProfile extends Activity implements OnClickListener {
 		occupation = (TextView) findViewById(R.id.occupation);
 		language = (TextView) findViewById(R.id.language);
 		add_rating = (TextView) findViewById(R.id.add_rating);
+		scrollview = (ScrollView) findViewById(R.id.scrollview);
+		paypal_id  = (TextView) findViewById(R.id.paypal_id);
+
+		paypal_id.setVisibility(View.GONE);
 
 		review_static.setVisibility(View.INVISIBLE);
 
@@ -175,6 +183,27 @@ public class ViewProfile extends Activity implements OnClickListener {
 		} else {
 			showDialog(Constants.No_INTERNET);
 		}
+
+		scrollview.setOnTouchListener(new View.OnTouchListener() {
+
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.v("PARENT", "PARENT TOUCH");
+				findViewById(R.id.listview).getParent()
+						.requestDisallowInterceptTouchEvent(false);
+				return false;
+			}
+		});
+
+		listview.setOnTouchListener(new View.OnTouchListener() {
+
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.v("CHILD", "CHILD TOUCH");
+				// Disallow the touch request for parent scroll on touch of
+				// child view
+				v.getParent().requestDisallowInterceptTouchEvent(true);
+				return false;
+			}
+		});
 	}
 
 	@Override
@@ -241,6 +270,8 @@ public class ViewProfile extends Activity implements OnClickListener {
 					String lang = (String) result.get("language");
 					String member_date = (String) result.get("member_from");
 
+                    String paypalId = (String) result.get("paypal_id");
+
 					name.setText(name_text);
 					/*location.setText("Location : " + address_text + " ,"
 							+ city_text + " ," + state_text);*/
@@ -259,8 +290,14 @@ public class ViewProfile extends Activity implements OnClickListener {
 
 					location.setText("Location : " +ADDRESS_TEXT);
 
-					about_me.setText("" + background);
+                    if(background.length()>1) {
+                        about_me.setText("" + background);
+                    } else {
+                        about_me.setVisibility(View.GONE);
+                    }
 					rating.setText("Rating : " + ratings_text);
+
+                    paypal_id.setText("PayPal ID : "+paypalId);
 
 					/*
 					 * String dateConvert =member_date; SimpleDateFormat
@@ -284,26 +321,23 @@ public class ViewProfile extends Activity implements OnClickListener {
 
 					Log.e("profile_text===>>>", "" + profile_text);
 
-					imageLoader.DisplayImage(profile_text, R.drawable.noimg,
-							profile_pic);
 					/*imageLoader.DisplayImage(profile_text, R.drawable.noimg,
-							blurr_img);*/
-                   /* Thread t = new Thread(){
-                        public void run(){
-                            final Bitmap bitmapToGetFromURL = getBitmapFromURL(profile_text);
+							profile_pic);*/
 
-                            runOnUiThread(new Runnable() {
+					Thread t = new Thread(){
+						public void run(){
+							final Bitmap bitmapToGetFromURL = getBitmapFromURL(profile_text);
 
-                                @Override
-                                public void run() {
-                                    croppedBitmap(bitmapToGetFromURL);
-                                }
-                            });
+							runOnUiThread(new Runnable() {
 
-                        }
-                    };t.start();
-*/
+								@Override
+								public void run() {
+									croppedBitmap(bitmapToGetFromURL);
+								}
+							});
 
+						}
+					};t.start();
 					try {
 						ratingBar.setRating(Float.parseFloat(ratings_text));
 					} catch (Exception e) {
@@ -402,11 +436,16 @@ public class ViewProfile extends Activity implements OnClickListener {
 			holder.message.setText(Constants.FollowersList.get(position).get(
 					"reviews"));
 
-			holder.ratingBar.setRating(Float.parseFloat(Constants.FollowersList
-					.get(position).get("ratings")));
+            try {
+
+                holder.ratingBar.setRating(Float.parseFloat(Constants.FollowersList
+                        .get(position).get("ratings")));
+            } catch(Exception e){
+               e.printStackTrace();
+            }
 
 			String profile_text = Constants.FollowersList.get(position).get(
-					"profile_pic");
+                    "profile_pic");
 
 			imageLoader.DisplayImage(profile_text, R.drawable.noimg,
 					holder.profile_pic);

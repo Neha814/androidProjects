@@ -15,14 +15,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import functions.Constants;
+
 public class Settings extends Activity implements OnClickListener {
 
 	TextView profile, skills, payment, notiifcation, password, location;
 	
 	ImageView gps_on_off;
 	ImageView back;
-	
-	LinearLayout back_ll;
+	View password_view ,profile_view;
+	LinearLayout back_ll,password_layout,profile_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,11 @@ public class Settings extends Activity implements OnClickListener {
 		back = (ImageView) findViewById(R.id.back);
 		back_ll = (LinearLayout) findViewById(R.id.back_ll);
 		gps_on_off = (ImageView) findViewById(R.id.gps_on_off);
+		password_layout = (LinearLayout) findViewById(R.id.password_layout);
+		password_view = (View) findViewById(R.id.password_view);
+        profile_layout = (LinearLayout) findViewById(R.id.profile_layout);
+        profile_view = (View) findViewById(R.id.profile_view);
+
 
 		profile.setOnClickListener(this);
 		skills.setOnClickListener(this);
@@ -65,7 +72,13 @@ public class Settings extends Activity implements OnClickListener {
 				localHandler2.postDelayed(this, 1000L);
 			}
 		}, 1000L);
-		
+
+		if(Constants.LOGIN_TYPE.equalsIgnoreCase("fb")){
+			password_layout.setVisibility(View.GONE);
+			password_view.setVisibility(View.GONE);
+            //profile_layout.setVisibility(View.GONE);
+            //profile_view.setVisibility(View.GONE);
+		}
 	
 	}
 

@@ -290,6 +290,7 @@ public class TaskDetail extends Activity {
 		addList.add(city);
 		addList.add(state);
 		addList.add(zipcode);
+		addList.add(country);
 
 		addList.removeAll(Arrays.asList("", null));
 

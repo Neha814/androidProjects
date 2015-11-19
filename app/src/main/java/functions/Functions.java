@@ -352,8 +352,8 @@ public class Functions {
 				localHashMap.put("skills", profile.getString("skills"));
 				localHashMap.put("occupation", profile.getString("occupation"));
 				localHashMap.put("language", profile.getString("language"));
-				localHashMap.put("member_from",
-						profile.getString("member_from"));
+				localHashMap.put("member_from", profile.getString("member_from"));
+                localHashMap.put("paypal_id", profile.getString("paypal_id"));
 
 				try {
 					JSONArray followers_list = result
@@ -548,6 +548,8 @@ public class Functions {
 					localhashMap.put("subcategory_name", Data.getJSONObject(i).getString("subcategory_name"));
                     localhashMap.put("comments", Data.getJSONObject(i)
                             .getString("comments"));
+                    localhashMap.put("paymentAdded", Data.getJSONObject(i)
+                            .getString("paymentAdded"));
 
 
                     JSONArray fileArray = Data.getJSONObject(i).getJSONArray("attachments");

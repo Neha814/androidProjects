@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +53,14 @@ public class DefaultProfile extends Activity implements OnClickListener {
 
 	ImageView back;
 	ImageView profile_pic;
-	TextView name, location, memeber_since, rating, about_me, no_of_reviews ,occupation,language;
+	TextView name, location, memeber_since, rating, about_me, no_of_reviews ,occupation,language,paypal_id;
 	ListView listview;
 	RatingBar ratingBar;
 	boolean isConnected;
 	ImageLoader imageLoader;
 	ImageView blurr_img;
+
+	ScrollView scrollview;
 	
 	TextView review_static;
 	
@@ -169,6 +173,10 @@ public class DefaultProfile extends Activity implements OnClickListener {
 		back_ll = (LinearLayout) findViewById(R.id.back_ll);
 		edit = (ImageView) findViewById(R.id.edit);
 		ll_edit = (LinearLayout) findViewById(R.id.ll_edit);
+		scrollview = (ScrollView) findViewById(R.id.scrollview);
+		paypal_id  = (TextView) findViewById(R.id.paypal_id);
+
+		paypal_id.setVisibility(View.GONE);
 		
 		review_static.setVisibility(View.INVISIBLE);
 
@@ -177,6 +185,27 @@ public class DefaultProfile extends Activity implements OnClickListener {
 		ll_edit.setOnClickListener(this);
 
 		getProfileCall();
+
+		scrollview.setOnTouchListener(new View.OnTouchListener() {
+
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.v("PARENT", "PARENT TOUCH");
+				findViewById(R.id.listview).getParent()
+						.requestDisallowInterceptTouchEvent(false);
+				return false;
+			}
+		});
+
+		listview.setOnTouchListener(new View.OnTouchListener() {
+
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.v("CHILD", "CHILD TOUCH");
+				// Disallow the touch request for parent scroll on touch of
+				// child view
+				v.getParent().requestDisallowInterceptTouchEvent(true);
+				return false;
+			}
+		});
 	}
 
 	private void getProfileCall() {
@@ -186,11 +215,11 @@ public class DefaultProfile extends Activity implements OnClickListener {
 			showDialog(Constants.No_INTERNET);
 		}
 
-		if(Constants.LOGIN_TYPE.equalsIgnoreCase("fb")){
+		/*if(Constants.LOGIN_TYPE.equalsIgnoreCase("fb")){
 			ll_edit.setVisibility(View.GONE);
 		} else {
 			ll_edit.setVisibility(View.VISIBLE);
-		}
+		}*/
 	}
 
 	@Override
@@ -256,6 +285,8 @@ public class DefaultProfile extends Activity implements OnClickListener {
 					String lang = (String) result.get("language");
 					String member_date = (String) result.get("member_from");
 
+                    String paypalId = (String) result.get("paypal_id");
+
 					name.setText(name_text);
 					
 					/**
@@ -275,15 +306,19 @@ public class DefaultProfile extends Activity implements OnClickListener {
 							.replace("]", "").replace(", ", ", ");
 					
 					location.setText("Location : " +ADDRESS_TEXT);
-				
-					about_me.setText("" + background);
+
+				    if(background.length()>1) {
+                        about_me.setText("" + background);
+                    } else {
+                        about_me.setVisibility(View.GONE);
+                    }
 					rating.setText("Rating : " + ratings_text);
+
+                    paypal_id.setText("PayPal ID : "+paypalId);
 					
+					memeber_since.setText("Member Since : " + member_date);
 					
-					
-					memeber_since.setText("Member Since : "+member_date);
-					
-					DefaultProfile.this.occupation.setText("Occupation : "+occupation);
+					DefaultProfile.this.occupation.setText("Occupation : " + occupation);
 					DefaultProfile.this.language.setText("Language : " + lang);
 
 					Log.e("profile_text===>>>", "" + profile_text);
@@ -405,8 +440,13 @@ public class DefaultProfile extends Activity implements OnClickListener {
 					"email"));
 			holder.message.setText(Constants.FollowersList.get(position).get(
 					"reviews"));
-			
-			holder.ratingBar.setRating(Float.parseFloat(Constants.FollowersList.get(position).get("ratings")));
+
+            try {
+                holder.ratingBar.setRating(Float.parseFloat(Constants.FollowersList.get(position).get("ratings")));
+
+            } catch(Exception e){
+                e.printStackTrace();
+            }
 			
 			final String  profile_text = Constants.FollowersList.get(position).get("profile_pic");
 			
@@ -421,7 +461,7 @@ public class DefaultProfile extends Activity implements OnClickListener {
 
 						@Override
 						public void run() {
-							*//*croppedBitmap(bitmapToGetFromURL);*//*
+							//croppedBitmap(bitmapToGetFromURL);
 
 
 
@@ -440,7 +480,7 @@ public class DefaultProfile extends Activity implements OnClickListener {
 								//takenImage2.recycle();
 								mBitmap = mScalingUtilities.getCircleBitmap(
 										cropedBitmap, 1);
-								//cropedBitmap.recycle();
+								cropedBitmap.recycle();
 
 
 
