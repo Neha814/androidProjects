@@ -23,21 +23,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.android.AsyncFacebookRunner.RequestListener;
-import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
-import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.FacebookError;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import functions.Constants;
@@ -65,17 +68,23 @@ public class Login extends Activity implements OnClickListener {
     String FIRSTNAME="" , LASTNAME="";
 
 	// Instance of Facebook Class
-	String APP_ID = "1443617225937981";
-	// String APP_ID = "1451811558461995";
+	//String APP_ID = "1443617225937981";
+
+	 String APP_ID = "1451811558461995";
 	private Facebook facebook = new Facebook(APP_ID);
 	private AsyncFacebookRunner mAsyncRunner;
 	String FILENAME = "AndroidSSO_data";
 
+    CallbackManager callbackManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
 		setContentView(R.layout.login);
+
+        callbackManager = CallbackManager.Factory.create();
 
 		isConnected = NetConnection
 				.checkInternetConnectionn(getApplicationContext());
@@ -115,7 +124,93 @@ public class Login extends Activity implements OnClickListener {
 		forgot_password.setOnClickListener(this);
 		take_task.setOnClickListener(this);
 		fb_sign_in.setOnClickListener(this);
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.d("Success", "Login");
+                        if (AccessToken.getCurrentAccessToken() != null) {
+                            RequestData();
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(Login.this, "Login Cancel", Toast.LENGTH_LONG).show();
+                        Log.d("Login Cancel", "Login Cancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Toast.makeText(Login.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.d("FacebookException", "" + exception.getMessage());
+                    }
+                });
 	}
+
+    public void RequestData(){
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                JSONObject json = response.getJSONObject();
+                try {
+                    if (json != null) {
+                        /*details_txt.setText(Html.fromHtml(text));
+                        profile.setProfileId(json.getString("id"));*/
+
+                        String name = json.getString("name");
+                        String email = json.getString("email");
+                        String profile = json.getString("link");
+                        String id = json.getString("id");
+
+
+                        String nameArray[] = name.split(" ");
+
+                        final String firstname = nameArray[0];
+                        final String lastname = nameArray[1];
+
+                        String FB_PIC_URL = "https://graph.facebook.com/" + id + "/picture?type=normal";
+
+                        Log.e("profile==>>", "" + profile);
+                        Log.e("name==>>", "" + name);
+                        Log.e("email==>>", "" + email);
+                        Log.e("FB_PIC_URL==>>", "" + FB_PIC_URL);
+
+
+                        FB_URL = "https://graph.facebook.com/" + id + "/picture?type=large";
+
+
+                        FIRSTNAME = firstname;
+                        LASTNAME = lastname;
+
+                        //    new RegisterTask(name, email, "" ).execute(new Void[0]);
+
+                        LoginManager.getInstance().logOut();
+                        try {
+                            new LoginTaskFB(name, email, id, firstname, lastname)
+                                    .execute(new Void[0]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        ;
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link,email,picture");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
 
 	@Override
 	public void onClick(View v) {
@@ -133,7 +228,7 @@ public class Login extends Activity implements OnClickListener {
 		} else if (v == fb_login || v==fb_sign_in) {
 			e.putString("withLogin","true");
 			e.commit();
-			FacebookLogin();
+			FacebookLoginNew();
 		} else if (v == forgot_password) {
 			Intent i = new Intent(Login.this, ForgotPassword.class);
 			startActivity(i);
@@ -147,7 +242,11 @@ public class Login extends Activity implements OnClickListener {
 
 	}
 
-	private void FacebookLogin() {
+    private void FacebookLoginNew() {
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "public_profile email"));
+    }
+
+	/*private void FacebookLogin() {
 		Log.i("fb lgin", "fb login");
 		Constants.mPrefs = getPreferences(MODE_PRIVATE);
 		String access_token = Constants.mPrefs.getString("access_token", null);
@@ -206,13 +305,13 @@ public class Login extends Activity implements OnClickListener {
 			});
 		}
 
-	}
+	}*/
 
 	/**
 	 * to get facebook profile info
 	 */
 
-	public void getProfileInformation() {
+/*	public void getProfileInformation() {
 		Log.e("get profile info===", "get profile info==");
 		mAsyncRunner.request("me", new RequestListener() {
 			@Override
@@ -246,7 +345,7 @@ public class Login extends Activity implements OnClickListener {
 
 						@Override
 						public void run() {
-							/*
+							*//*
 							 * Log.e("name==", "" + name); Editor e = sp.edit();
 							 * e.putString("name", name);
 							 * e.putString("email",name+".facebook.com" );
@@ -255,7 +354,7 @@ public class Login extends Activity implements OnClickListener {
 							 * email = trimNAME+".facebook.com";
 							 * 
 							 * e.commit();
-							 */
+							 *//*
 
 
 							Toast.makeText(getApplicationContext(),
@@ -297,7 +396,7 @@ public class Login extends Activity implements OnClickListener {
 
 			}
 		});
-	}
+	}*/
 
 	private void callLoginAPI() {
 		String username = usernameET.getText().toString().trim();
@@ -755,7 +854,9 @@ public class Login extends Activity implements OnClickListener {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		facebook.authorizeCallback(requestCode, resultCode, data);
+	//	facebook.authorizeCallback(requestCode, resultCode, data);
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
 	}
 
